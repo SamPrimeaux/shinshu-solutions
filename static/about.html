@@ -25,18 +25,18 @@
             --orange-primary: #FF8C42;
             --orange-dark: #E67635;
             --text-dark: #1A1A1A;
-            --text-gray: #666;
+            --text-gray: #4a4a4a;
         }
 
         body {
             font-family: 'Roboto', sans-serif;
-            line-height: 1.6;
+            line-height: 1.7;
             color: var(--text-dark);
         }
 
         nav {
             background: white;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
             position: sticky;
             top: 0;
             z-index: 100;
@@ -44,7 +44,7 @@
 
         .nav-container {
             width: 100%;
-            padding: 0.5rem 4rem;
+            padding: 0 4rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -53,11 +53,11 @@
         .logo {
             display: flex;
             align-items: center;
-            padding: 0.25rem 0;
+            padding: 0;
         }
 
         .logo img {
-            height: 135px;
+            height: 150px;
             width: auto;
             object-fit: contain;
             transition: transform 0.3s ease;
@@ -65,7 +65,7 @@
 
         @media (min-width: 1600px) {
             .nav-container {
-                padding: 0.5rem 6rem;
+                padding: 0 6rem;
             }
         }
 
@@ -108,43 +108,92 @@
             width: 100%;
         }
 
-        .hero {
-            background: linear-gradient(135deg, var(--orange-primary), var(--orange-dark));
-            color: white;
-            padding: 5rem 2rem;
-            text-align: center;
+        /* Split Hero Section */
+        .split-hero {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            padding: 6rem 4rem;
+            max-width: 1600px;
+            margin: 0 auto;
+            gap: 5rem;
+            background: #fff;
         }
 
-        .hero h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
+        .hero-text {
+            flex: 1;
+            min-width: 400px;
+            max-width: 700px;
         }
 
+        .hero-text h1 {
+            font-size: 3.5rem;
+            margin-bottom: 2rem;
+            line-height: 1.1;
+            color: var(--text-dark);
+        }
+
+        .hero-text h3 {
+            font-size: 1.5rem;
+            color: var(--orange-primary);
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-text p {
+            font-size: 1.15rem;
+            color: var(--text-gray);
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+        }
+
+        .hero-image {
+            flex: 1;
+            min-width: 400px;
+            max-width: 800px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero-image img {
+            width: 100%;
+            height: auto;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            /* Ensure no cropping */
+            object-fit: contain;
+        }
+
+        @media (max-width: 960px) {
+            .split-hero {
+                flex-direction: column-reverse;
+                /* Text on bottom on mobile? Or top? Usually Text top on mobile better, but user said split. */
+                flex-direction: column;
+                padding: 3rem 2rem;
+                gap: 3rem;
+                text-align: center;
+            }
+
+            .hero-text {
+                min-width: 100%;
+            }
+
+            .hero-image {
+                min-width: 100%;
+            }
+
+            .hero-text h1 {
+                font-size: 2.5rem;
+            }
+        }
+
+        /* Content Sections */
         .section {
             max-width: 1200px;
             margin: 0 auto;
             padding: 4rem 2rem;
-        }
-
-        .section h2 {
-            font-size: 2.5rem;
-            margin-bottom: 2rem;
-            color: var(--text-dark);
-        }
-
-        .section p {
-            font-size: 1.2rem;
-            color: var(--text-gray);
-            line-height: 1.8;
-            margin-bottom: 1.5rem;
-        }
-
-        .highlight-box {
-            background: linear-gradient(135deg, rgba(255, 140, 66, 0.1), rgba(230, 118, 53, 0.1));
-            border-left: 4px solid var(--orange-primary);
-            padding: 2rem;
-            border-radius: 8px;
-            margin: 2rem 0;
         }
 
         footer {
@@ -202,43 +251,44 @@
         </div>
     </nav>
 
-    <section class="hero">
-        <h1>About Jake Waalk</h1>
-        <p>Your local expert with deep roots in Nagano</p>
+    <section class="split-hero">
+        <div class="hero-text">
+            <h1>About Jake Waalk</h1>
+            <h3>Your Local Expert in Nagano Prefecture</h3>
+            <p>
+                Shinshu Solutions is a Nagano-based bilingual consulting service operated by Jake Waalk, specializing
+                in supporting foreign real estate investors and Japanese construction firms. I help international
+                clients navigate the practical realities of buying, renovating, and maintaining property in Japan.
+            </p>
+            <p>
+                My service area is centered on the world-class ski resort <strong>Nozawa Onsen</strong>, which was
+                featured on the cover of Condé Nast Traveler as one of the world's top 9 ski resorts for the 2026
+                season.
+            </p>
+            <div style="margin-top: 2rem;">
+                <a href="https://www.facebook.com/jake.waalk" target="_blank"
+                    style="color: var(--orange-primary); font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; font-size: 1.1rem; padding: 0.5rem 1rem; border: 2px solid var(--orange-primary); border-radius: 50px; transition: all 0.3s;">
+                    <svg style="width: 20px; height: 20px;" fill="currentColor" viewBox="0 0 24 24">
+                        <path
+                            d="M18.77,7.46H14.5v-1.9c0-.9.6-1.1,1-1.1h3V.5h-4.33C10.24.5,9.5,3.44,9.5,5.32v2.15h-3v4h3v12h5v-12h3.85l.42-4Z" />
+                    </svg>
+                    Connect on Facebook
+                </a>
+            </div>
+        </div>
+        <div class="hero-image">
+            <img src="https://pub-c341cc62c3274ccba5aa77286b26fb90.r2.dev/jakewaalkimages/september252021-jakemountainpic.webp"
+                alt="Jake Waalk in the Japanese Mountains">
+        </div>
     </section>
 
     <section class="section">
-        <h2>Shinshu Solutions</h2>
-        <p>
-            Shinshu Solutions is a Nagano-based bilingual consulting service operated by Jake Waalk,
-            specializing in supporting foreign real estate investors and Japanese construction firms.
-        <div class="content-grid">
-            <div class="about-image">
-                <img src="https://pub-c341cc62c3274ccba5aa77286b26fb90.r2.dev/jakewaalkimages/jakeoverlookingmtn.jpg"
-                    alt="Jake Waalk" class="profile-img">
-                <div style="margin-top: 1.5rem; text-align: center;">
-                    <a href="https://www.facebook.com/jake.waalk" target="_blank"
-                        style="color: var(--orange-primary); font-weight: 500; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem;">
-                        <svg style="width: 24px; height: 24px;" fill="currentColor" viewBox="0 0 24 24">
-                            <path
-                                d="M18.77,7.46H14.5v-1.9c0-.9.6-1.1,1-1.1h3V.5h-4.33C10.24.5,9.5,3.44,9.5,5.32v2.15h-3v4h3v12h5v-12h3.85l.42-4Z" />
-                        </svg>
-                        Connect on Facebook
-                    </a>
-                </div>
-            </div>
-            <div class="about-text">
-                <h2>Jake Waalk</h2>
-                <h3 style="color: var(--text-dark); margin-bottom: 1rem;">Your Local Expert in Nagano Prefecture</h3>
-                <p>Shinshu Solutions is a Nagano-based bilingual consulting service operated by Jake Waalk, specializing
-                    in supporting foreign real estate investors and Japanese construction firms. I help international
-                    clients navigate the practical realities of buying, renovating, and maintaining property in Japan.
-                </p>
-                <p>My service area is centered on the world-class ski resort <strong>Nozawa Onsen</strong>, which was
-                    featured on the cover of Condé Nast Traveler as one of the world's top 9 ski resorts for the 2026
-                    season. I also work in the surrounding region including Iiyama, Shinano, Myoko, Karuizawa, and
-                    nearby resort areas.</p>
-                <p>I relocated to Nagano Prefecture after earning my Master's Degree in Anthropology in 2015. Since
+        <div
+            style="background: linear-gradient(to right, #f9f9f9, white); padding: 3rem; border-radius: 20px; box-shadow: 0 4px 30px rgba(0,0,0,0.03);">
+            <h2 style="font-size: 2rem; margin-bottom: 2rem; color: var(--text-dark);">Professional Background</h2>
+            <div style="column-count: 2; column-gap: 4rem; text-align: justify;">
+                <p style="margin-top: 0;">I relocated to Nagano Prefecture after earning my Master's Degree in
+                    Anthropology in 2015. Since
                     then, I have amassed wide-ranging professional experience in Nagano across both the public and
                     private sectors. I worked as an English teacher on the JET Program, serving two years as President
                     of Nagano AJET.</p>
@@ -248,98 +298,100 @@
                     marketing and international client management for a Nagano-based export firm.</p>
             </div>
         </div>
+    </section>
 
-        <div
-            style="background: white; padding: 3rem; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); margin-bottom: 4rem;">
-            <h2 style="text-align: center; margin-bottom: 2rem;">Qualifications & Experience</h2>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
-                <ul style="list-style: none; padding: 0;">
-                    <li style="margin-bottom: 1rem; display: flex; align-items: flex-start; gap: 1rem;">
-                        <span style="color: var(--orange-primary);">✓</span>
-                        <strong>JLPT N1 Certification</strong> (Highest Level of Japanese Fluency)
-                    </li>
-                    <li style="margin-bottom: 1rem; display: flex; align-items: flex-start; gap: 1rem;">
-                        <span style="color: var(--orange-primary);">✓</span>
-                        5+ Years Technical Japanese-English Translation & Interpretation
-                    </li>
-                    <li style="margin-bottom: 1rem; display: flex; align-items: flex-start; gap: 1rem;">
-                        <span style="color: var(--orange-primary);">✓</span>
-                        Master's Degree in Anthropology
-                    </li>
-                    <li style="margin-bottom: 1rem; display: flex; align-items: flex-start; gap: 1rem;">
-                        <span style="color: var(--orange-primary);">✓</span>
-                        First Non-Japanese Town Development Officer in Nagano Prefecture
-                    </li>
-                </ul>
-                <ul style="list-style: none; padding: 0;">
-                    <li style="margin-bottom: 1rem; display: flex; align-items: flex-start; gap: 1rem;">
-                        <span style="color: var(--orange-primary);">✓</span>
-                        President of Nagano AJET (2 Years)
-                    </li>
-                    <li style="margin-bottom: 1rem; display: flex; align-items: flex-start; gap: 1rem;">
-                        <span style="color: var(--orange-primary);">✓</span>
-                        Deep Construction Industry Connections Through Family Ties
-                    </li>
-                    <li style="margin-bottom: 1rem; display: flex; align-items: flex-start; gap: 1rem;">
-                        <span style="color: var(--orange-primary);">✓</span>
-                        Export Industry Experience in International Client Management
-                    </li>
-                </ul>
+    <div class="section">
+        <div style="background: white; padding: 0; margin-bottom: 4rem;">
+            <h2 style="text-align: center; margin-bottom: 3rem; font-size: 2.5rem;">Qualifications & Experience</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem;">
+                <!-- Cards for qualifications -->
+                <div
+                    style="background: #FFF8F3; padding: 2rem; border-radius: 12px; border-left: 4px solid var(--orange-primary);">
+                    <h3 style="color: var(--orange-primary); margin-bottom: 0.5rem; font-size: 1.25rem;">Language
+                        Expertise</h3>
+                    <p style="margin: 0; font-weight: 500;">JLPT N1 Certification</p>
+                    <p style="margin: 0; opacity: 0.8; font-size: 0.95rem;">Highest Level of Japanese Fluency</p>
+                    <p style="margin: 0.5rem 0 0; font-weight: 500;">5+ Years Translation</p>
+                    <p style="margin: 0; opacity: 0.8; font-size: 0.95rem;">Technical Japanese-English</p>
+                </div>
+                <div
+                    style="background: #FFF8F3; padding: 2rem; border-radius: 12px; border-left: 4px solid var(--orange-primary);">
+                    <h3 style="color: var(--orange-primary); margin-bottom: 0.5rem; font-size: 1.25rem;">Leadership</h3>
+                    <p style="margin: 0; font-weight: 500;">Town Development Officer</p>
+                    <p style="margin: 0; opacity: 0.8; font-size: 0.95rem;">First Non-Japanese in Nagano</p>
+                    <p style="margin: 0.5rem 0 0; font-weight: 500;">Nagano AJET President</p>
+                    <p style="margin: 0; opacity: 0.8; font-size: 0.95rem;">2 Years Service</p>
+                </div>
+                <div
+                    style="background: #FFF8F3; padding: 2rem; border-radius: 12px; border-left: 4px solid var(--orange-primary);">
+                    <h3 style="color: var(--orange-primary); margin-bottom: 0.5rem; font-size: 1.25rem;">Education &
+                        Industry</h3>
+                    <p style="margin: 0; font-weight: 500;">Master's in Anthropology</p>
+                    <p style="margin: 0.5rem 0 0; font-weight: 500;">Deep Industry Connections</p>
+                    <p style="margin: 0; opacity: 0.8; font-size: 0.95rem;">Construction & Export Management</p>
+                </div>
             </div>
         </div>
 
-        <h2 style="text-align: center; margin-bottom: 3rem;">Service Areas</h2>
-        <div class="services-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem;">
-            <div class="service-card" style="padding: 0; overflow: hidden;">
+        <h2 style="text-align: center; margin-bottom: 3rem; font-size: 2.5rem;">Service Areas</h2>
+        <div class="services-grid"
+            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem;">
+            <div class="service-card"
+                style="padding: 0; overflow: hidden; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); background: white;">
                 <img src="https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=800&q=80" alt="Nozawa Onsen"
                     style="width: 100%; height: 200px; object-fit: cover;">
                 <div style="padding: 1.5rem;">
-                    <h3>Nozawa Onsen</h3>
-                    <p>Primary Focus Area</p>
+                    <h3 style="margin-bottom: 0.5rem;">Nozawa Onsen</h3>
+                    <p style="color: var(--orange-primary); font-weight: 500;">Primary Focus Area</p>
                 </div>
             </div>
-            <div class="service-card" style="padding: 0; overflow: hidden;">
+            <div class="service-card"
+                style="padding: 0; overflow: hidden; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); background: white;">
                 <img src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=800&q=80" alt="Iiyama"
                     style="width: 100%; height: 200px; object-fit: cover;">
                 <div style="padding: 1.5rem;">
-                    <h3>Iiyama</h3>
-                    <p>Scenic Nature & Culture</p>
+                    <h3 style="margin-bottom: 0.5rem;">Iiyama</h3>
+                    <p style="color: #666;">Scenic Nature & Culture</p>
                 </div>
             </div>
-            <div class="service-card" style="padding: 0; overflow: hidden;">
+            <div class="service-card"
+                style="padding: 0; overflow: hidden; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); background: white;">
                 <img src="https://images.unsplash.com/photo-1551632811-561732d1e306?w=800&q=80" alt="Myoko"
                     style="width: 100%; height: 200px; object-fit: cover;">
                 <div style="padding: 1.5rem;">
-                    <h3>Myoko</h3>
-                    <p>Powder Snow Destination</p>
+                    <h3 style="margin-bottom: 0.5rem;">Myoko</h3>
+                    <p style="color: #666;">Powder Snow Destination</p>
                 </div>
             </div>
-            <div class="service-card" style="padding: 0; overflow: hidden;">
+            <div class="service-card"
+                style="padding: 0; overflow: hidden; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); background: white;">
                 <img src="https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=800&q=80" alt="Karuizawa"
                     style="width: 100%; height: 200px; object-fit: cover;">
                 <div style="padding: 1.5rem;">
-                    <h3>Karuizawa</h3>
-                    <p>Luxury Resort Area</p>
+                    <h3 style="margin-bottom: 0.5rem;">Karuizawa</h3>
+                    <p style="color: #666;">Luxury Resort Area</p>
                 </div>
             </div>
-            <div class="service-card" style="padding: 0; overflow: hidden;">
+            <div class="service-card"
+                style="padding: 0; overflow: hidden; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); background: white;">
                 <img src="https://images.unsplash.com/photo-1480796927426-f609979314bd?w=800&q=80" alt="Shinano"
                     style="width: 100%; height: 200px; object-fit: cover;">
                 <div style="padding: 1.5rem;">
-                    <h3>Shinano</h3>
-                    <p>Heart of Nagano</p>
+                    <h3 style="margin-bottom: 0.5rem;">Shinano</h3>
+                    <p style="color: #666;">Heart of Nagano</p>
                 </div>
             </div>
-            <div class="service-card" style="padding: 0; overflow: hidden;">
+            <div class="service-card"
+                style="padding: 0; overflow: hidden; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); background: white;">
                 <img src="https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?w=800&q=80" alt="Komoro"
                     style="width: 100%; height: 200px; object-fit: cover;">
                 <div style="padding: 1.5rem;">
-                    <h3>Komoro Region</h3>
-                    <p>Historic Castle Town</p>
+                    <h3 style="margin-bottom: 0.5rem;">Komoro Region</h3>
+                    <p style="color: #666;">Historic Castle Town</p>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
     <footer>
         <div class="footer-links">

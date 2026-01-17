@@ -45,7 +45,7 @@
 
         .nav-container {
             width: 100%;
-            padding: 0.5rem 4rem;
+            padding: 0 4rem;
             /* Reduced vertical padding, wider horizontal */
             display: flex;
             justify-content: space-between;
@@ -55,12 +55,12 @@
         .logo {
             display: flex;
             align-items: center;
-            padding: 0.25rem 0;
+            padding: 0;
             /* Minimal padding */
         }
 
         .logo img {
-            height: 135px;
+            height: 150px;
             /* Slightly smaller than 120 to fit slim header, or keep large if desired. Let's try 100px with less padding */
             width: auto;
             object-fit: contain;
@@ -70,7 +70,7 @@
         /* On very large screens, ensure it stays consistent */
         @media (min-width: 1600px) {
             .nav-container {
-                padding: 0.5rem 6rem;
+                padding: 0 6rem;
             }
         }
 
