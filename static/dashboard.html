@@ -4,762 +4,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shinshu Solutions | Dashboard</title>
+    <title>Overview - Shinshu Admin</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="icon" type="image/png"
         href="https://pub-c341cc62c3274ccba5aa77286b26fb90.r2.dev/iconography/shinshu-solutions-icon.png">
-    <style>
-        :root {
-            --primary: #FF8C42;
-            --primary-dark: #E67635;
-            --bg-light: #F9FAFB;
-            --border-color: #E5E7EB;
-            --text-main: #111827;
-            --text-muted: #6B7280;
-            --danger: #EF4444;
-            --success: #10B981;
-        }
-
-        * {
-            box-sizing: border-box;
-            outline: none;
-        }
-
-        body {
-            margin: 0;
-            font-family: 'Inter', sans-serif;
-            background: var(--bg-light);
-            color: var(--text-main);
-            display: flex;
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        /* Sidebar */
-        aside {
-            width: 260px;
-            background: white;
-            border-right: 1px solid var(--border-color);
-            display: flex;
-            flex-direction: column;
-            padding: 1.5rem;
-            flex-shrink: 0;
-        }
-
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 2.5rem;
-            text-decoration: none;
-            color: var(--text-main);
-        }
-
-        .brand img {
-            width: 40px;
-            height: 40px;
-            object-fit: contain;
-        }
-
-        .brand h1 {
-            font-size: 1rem;
-            font-weight: 600;
-            margin: 0;
-            letter-spacing: -0.01em;
-        }
-
-        nav button {
-            background: none;
-            border: none;
-            width: 100%;
-            text-align: left;
-            padding: 0.75rem 1rem;
-            border-radius: 6px;
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-            margin-bottom: 0.25rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        nav button:hover {
-            background: var(--bg-light);
-            color: var(--text-main);
-        }
-
-        nav button.active {
-            background: #FFF7ED;
-            /* Light orange tint */
-            color: var(--primary-dark);
-            font-weight: 600;
-        }
-
-        .logout-btn {
-            margin-top: auto;
-            color: var(--danger) !important;
-        }
-
-        .logout-btn:hover {
-            background: #FEF2F2 !important;
-        }
-
-        /* Main Content */
-        main {
-            flex: 1;
-            padding: 2rem 3rem;
-            overflow-y: auto;
-        }
-
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-        }
-
-        h2 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin: 0;
-        }
-
-        /* Views */
-        .view-section {
-            display: none;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .view-section.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(5px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Data Tables / Grids */
-        .card {
-            background: white;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 1.5rem;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.9rem;
-        }
-
-        th {
-            text-align: left;
-            padding: 0.75rem 1rem;
-            border-bottom: 1px solid var(--border-color);
-            color: var(--text-muted);
-            font-weight: 500;
-        }
-
-        td {
-            padding: 1rem;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        tr:last-child td {
-            border-bottom: none;
-        }
-
-        .badge {
-            display: inline-block;
-            padding: 0.25rem 0.6rem;
-            border-radius: 99px;
-            font-size: 0.75rem;
-            font-weight: 500;
-        }
-
-        .badge-new {
-            background: #DBEAFE;
-            color: #1E40AF;
-        }
-
-        .badge-read {
-            background: var(--bg-light);
-            color: var(--text-muted);
-        }
-
-        /* Asset Grid */
-        .asset-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .asset-card {
-            background: white;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            overflow: hidden;
-            transition: all 0.2s;
-            position: relative;
-        }
-
-        .asset-card:hover {
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-            border-color: var(--primary);
-        }
-
-        .asset-thumb {
-            height: 140px;
-            width: 100%;
-            background: #f4f4f4;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-        }
-
-        .asset-thumb img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .asset-thumb.file-type {
-            font-size: 2rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-        }
-
-        .asset-meta {
-            padding: 0.75rem;
-        }
-
-        .asset-name {
-            font-size: 0.85rem;
-            font-weight: 500;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            margin-bottom: 0.25rem;
-        }
-
-        .asset-size {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-        }
-
-        .btn-delete {
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            background: rgba(255, 255, 255, 0.9);
-            border: 1px solid var(--danger);
-            color: var(--danger);
-            border-radius: 4px;
-            width: 24px;
-            height: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            opacity: 0;
-            transition: opacity 0.2s;
-        }
-
-        .asset-card:hover .btn-delete {
-            opacity: 1;
-        }
-
-        /* Buttons */
-        .btn {
-            padding: 0.6rem 1.2rem;
-            border-radius: 6px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            cursor: pointer;
-            border: 1px solid transparent;
-            transition: all 0.2s;
-        }
-
-        .btn-primary {
-            background: var(--primary);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: var(--primary-dark);
-        }
-
-        .btn-outline {
-            background: white;
-            border-color: var(--border-color);
-            color: var(--text-main);
-        }
-
-        .btn-outline:hover {
-            border-color: var(--text-muted);
-        }
-
-        /* Forms */
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-
-        input,
-        textarea,
-        select {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            font-family: inherit;
-            font-size: 0.9rem;
-        }
-
-        input:focus,
-        textarea:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(255, 140, 66, 0.1);
-        }
-
-        /* Modal */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-        }
-
-        .modal {
-            background: white;
-            border-radius: 8px;
-            padding: 2rem;
-            width: 90%;
-            max-width: 500px;
-        }
-
-        .modal.active {
-            display: flex;
-        }
-    </style>
+    <link rel="stylesheet" href="/dash-style.css">
 </head>
 
 <body>
 
-    <!-- Sidebar -->
-    <aside>
-        <a href="/" class="brand">
-            <img src="https://pub-c341cc62c3274ccba5aa77286b26fb90.r2.dev/iconography/shinshu-solutions-icon.png"
-                alt="Logo">
-            <h1>SHINSHU ADMIN</h1>
-        </a>
+    <script src="/dash-sidebar.js"></script>
+    <script>renderSidebar('overview');</script>
 
-        <nav>
-            <button class="nav-item active" data-tab="overview">
-                <span>Overview</span>
-            </button>
-            <button class="nav-item" data-tab="inbox">
-                <span>Inbox</span>
-            </button>
-            <button class="nav-item" data-tab="content">
-                <span>Site Content</span>
-            </button>
-            <button class="nav-item" data-tab="assets">
-                <span>Media Assets</span>
-            </button>
-            <button class="nav-item logout-btn" onclick="logout()">
-                <span>Logout</span>
-            </button>
-        </nav>
-    </aside>
-
-    <!-- Main Content -->
     <main>
+        <header>
+            <h2>Dashboard Overview</h2>
+            <div style="font-size: 0.9rem; color: #666;">Welcome back to Shinshu Solutions</div>
+        </header>
 
-        <!-- Overview View -->
-        <section id="overview" class="view-section active">
-            <header>
-                <h2>Dashboard Overview</h2>
-            </header>
-            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;">
-                <div class="card">
-                    <h3 style="margin: 0 0 0.5rem; font-size: 0.9rem; color: var(--text-muted);">Total Assets</h3>
-                    <p style="font-size: 2rem; font-weight: 600; margin: 0;" id="stat-assets">-</p>
-                </div>
-                <div class="card">
-                    <h3 style="margin: 0 0 0.5rem; font-size: 0.9rem; color: var(--text-muted);">New Messages</h3>
-                    <p style="font-size: 2rem; font-weight: 600; margin: 0;" id="stat-messages">-</p>
-                </div>
-                <div class="card">
-                    <h3 style="margin: 0 0 0.5rem; font-size: 0.9rem; color: var(--text-muted);">System Status</h3>
-                    <div style="display: flex; align-items: center; gap: 8px;">
-                        <span style="width: 10px; height: 10px; background: var(--success); border-radius: 50%;"></span>
-                        <span style="font-weight: 500;">Operational</span>
-                    </div>
-                </div>
+        <div
+            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 3rem;">
+            <div class="card" style="border-left: 4px solid var(--primary);">
+                <h3
+                    style="margin: 0 0 0.5rem; font-size: 0.9rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">
+                    Total Assets</h3>
+                <p style="font-size: 2.5rem; font-weight: 600; margin: 0; color: var(--text-main);" id="stat-assets">-
+                </p>
+                <div style="margin-top: 1rem; font-size: 0.85rem; color: var(--primary); cursor: pointer;"
+                    onclick="window.location.href='/dashboard-media.html'">Manage Library &rarr;</div>
             </div>
-        </section>
 
-        <!-- Inbox View -->
-        <section id="inbox" class="view-section">
-            <header>
-                <h2>Inbox</h2>
-            </header>
-            <div class="card">
-                <table id="messages-table">
-                    <thead>
-                        <tr>
-                            <th>From</th>
-                            <th>Email</th>
-                            <th>Date</th>
-                            <th>Status</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td colspan="5" style="text-align: center;">Loading...</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="card" style="border-left: 4px solid #3B82F6;">
+                <h3
+                    style="margin: 0 0 0.5rem; font-size: 0.9rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">
+                    New Messages</h3>
+                <p style="font-size: 2.5rem; font-weight: 600; margin: 0; color: var(--text-main);" id="stat-messages">-
+                </p>
+                <div style="margin-top: 1rem; font-size: 0.85rem; color: #3B82F6; cursor: pointer;"
+                    onclick="window.location.href='/dashboard-inbox.html'">View Inbox &rarr;</div>
             </div>
-        </section>
 
-        <!-- Content View -->
-        <section id="content" class="view-section">
-            <header>
-                <h2>Site Content Editor</h2>
-                <button class="btn btn-primary" onclick="saveContent()">Save Changes</button>
-            </header>
-            <div class="card">
-                <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Edit key text areas of your public website.
-                    Changes take effect immediately.</p>
-                <div id="content-editor-form">
-                    <!-- Dynamic Inputs -->
-                    <div style="text-align: center; padding: 2rem;">Loading content...</div>
+            <div class="card" style="border-left: 4px solid #10B981;">
+                <h3
+                    style="margin: 0 0 0.5rem; font-size: 0.9rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">
+                    System Status</h3>
+                <div style="display: flex; align-items: center; gap: 8px; margin-top: 0.5rem;">
+                    <span
+                        style="width: 12px; height: 12px; background: #10B981; border-radius: 50%; box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);"></span>
+                    <span style="font-weight: 600; font-size: 1.2rem;">Operational</span>
                 </div>
+                <div style="margin-top: 1.3rem; font-size: 0.85rem; color: #10B981;">All systems online</div>
             </div>
-        </section>
+        </div>
 
-        <!-- Assets View -->
-        <section id="assets" class="view-section">
-            <header>
-                <h2>Media Library</h2>
-                <button class="btn btn-primary" onclick="openUploadModal()">Upload New</button>
-            </header>
-            <div id="assets-container" class="asset-grid">
-                <!-- Assets loaded here -->
+        <div class="card">
+            <h3 style="margin-bottom: 1.5rem;">Quick Actions</h3>
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                <button class="btn btn-outline" onclick="window.location.href='/dashboard-content.html'">Edit Website
+                    Text</button>
+                <button class="btn btn-outline" onclick="window.location.href='/dashboard-media.html'">Upload New
+                    Images</button>
+                <button class="btn btn-outline" onclick="window.open('/', '_blank')">View Live Site</button>
             </div>
-        </section>
+        </div>
 
     </main>
 
-    <!-- Upload Modal -->
-    <div class="modal-overlay" id="upload-modal">
-        <div class="modal">
-            <h3 style="margin-top: 0;">Upload Asset</h3>
-            <div class="form-group">
-                <input type="file" id="file-input">
-            </div>
-            <div style="display: flex; justify-content: flex-end; gap: 1rem;">
-                <button class="btn btn-outline" onclick="closeUploadModal()">Cancel</button>
-                <button class="btn btn-primary" onclick="uploadAsset()">Upload</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Message Detail Modal -->
-    <div class="modal-overlay" id="message-modal">
-        <div class="modal">
-            <h3 style="margin-top: 0;">Message Details</h3>
-            <div id="message-detail-content"></div>
-            <div style="display: flex; justify-content: flex-end; margin-top: 1.5rem;">
-                <button class="btn btn-outline" onclick="closeMessageModal()">Close</button>
-                <a id="reply-link" href="#" class="btn btn-primary"
-                    style="margin-left: 10px; text-decoration: none;">Reply</a>
-            </div>
-        </div>
-    </div>
-
     <script>
-        // --- State ---
-        let assets = [];
-        let messages = [];
-        let contentData = {};
-
-        // --- Auth & Init ---
         document.addEventListener('DOMContentLoaded', async () => {
-            const auth = await checkAuth();
-            if (!auth) return;
-
-            // Load data
-            loadAssets();
-            loadMessages();
-            loadContent();
-
-            // Setup Navigation
-            document.querySelectorAll('.nav-item').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const tab = btn.dataset.tab;
-                    if (!tab) return; // logout btn
-
-                    // UI Toggle
-                    document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-
-                    document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
-                    document.getElementById(tab).classList.add('active');
-                });
-            });
+            const user = await checkAuth();
+            if (!user) return;
+            loadStats();
         });
 
-        async function checkAuth() {
+        async function loadStats() {
             try {
-                const res = await fetch('/api/auth/me');
-                if (!res.ok) {
-                    window.location.href = '/login';
-                    return false;
+                const [resAssets, resMessages] = await Promise.all([
+                    fetch('/api/assets'),
+                    fetch('/api/messages')
+                ]);
+
+                const dataAssets = await resAssets.json();
+                const dataMessages = await resMessages.json();
+
+                if (dataAssets.success) {
+                    document.getElementById('stat-assets').innerText = dataAssets.assets.length;
                 }
-                return true;
-            } catch (e) {
-                window.location.href = '/login';
-                return false;
-            }
-        }
 
-        async function logout() {
-            await fetch('/api/auth/logout', { method: 'POST' });
-            window.location.href = '/login';
-        }
-
-        // --- Assets ---
-        async function loadAssets() {
-            try {
-                const res = await fetch('/api/assets');
-                const data = await res.json();
-                if (data.success) {
-                    assets = data.assets;
-                    renderAssets();
-                    document.getElementById('stat-assets').innerText = assets.length;
+                if (dataMessages.success) {
+                    const unread = dataMessages.messages.filter(m => m.status === 'unread').length;
+                    document.getElementById('stat-messages').innerText = unread > 0 ? unread : '0';
                 }
             } catch (e) { console.error(e); }
         }
-
-        function renderAssets() {
-            const container = document.getElementById('assets-container');
-            container.innerHTML = assets.map(asset => {
-                const isImg = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml'].includes(asset.type);
-                return `
-                    <div class="asset-card">
-                        <button class="btn-delete" onclick="deleteAsset('${asset.key}')">×</button>
-                        <div class="asset-thumb ${!isImg ? 'file-type' : ''}">
-                            ${isImg ? `<img src="${asset.url}" loading="lazy">` : 'FILE'}
-                        </div>
-                        <div class="asset-meta">
-                            <div class="asset-name" title="${asset.key}">${asset.key}</div>
-                            <div class="asset-size">${formatBytes(asset.size)}</div>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        async function deleteAsset(key) {
-            if (!confirm(`Delete ${key}?`)) return;
-            const res = await fetch(`/api/assets/${encodeURIComponent(key)}`, { method: 'DELETE' });
-            if (res.ok) loadAssets();
-        }
-
-        function openUploadModal() { document.getElementById('upload-modal').classList.add('active'); }
-        function closeUploadModal() { document.getElementById('upload-modal').classList.remove('active'); }
-
-        async function uploadAsset() {
-            const fileInput = document.getElementById('file-input');
-            if (fileInput.files.length === 0) return;
-
-            const file = fileInput.files[0];
-            const formData = new FormData();
-            formData.append('file', file);
-
-            const btn = document.querySelector('#upload-modal .btn-primary');
-            const originalText = btn.innerText;
-            btn.innerText = 'Uploading...';
-            btn.disabled = true;
-
-            try {
-                const res = await fetch('/api/assets/upload', {
-                    method: 'POST',
-                    body: formData
-                });
-                if (res.ok) {
-                    closeUploadModal();
-                    loadAssets();
-                    fileInput.value = '';
-                } else {
-                    alert('Upload failed');
-                }
-            } catch (e) { console.error(e); alert('Error uploading'); }
-
-            btn.innerText = originalText;
-            btn.disabled = false;
-        }
-
-        // --- Messages ---
-        async function loadMessages() {
-            try {
-                const res = await fetch('/api/messages');
-                const data = await res.json();
-                if (data.success) {
-                    messages = data.messages;
-                    renderMessages();
-                    document.getElementById('stat-messages').innerText = messages.length;
-                }
-            } catch (e) { console.error(e); }
-        }
-
-        function renderMessages() {
-            const tbody = document.querySelector('#messages-table tbody');
-            if (messages.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 2rem;">No messages yet.</td></tr>';
-                return;
-            }
-
-            tbody.innerHTML = messages.map(msg => `
-                <tr style="cursor: pointer" onclick='openMessageDetail(${JSON.stringify(msg)})'>
-                    <td>${escapeHtml(msg.name)}</td>
-                    <td>${escapeHtml(msg.email)}</td>
-                    <td>${new Date(msg.received_at).toLocaleDateString()}</td>
-                    <td><span class="badge ${msg.status === 'unread' ? 'badge-new' : 'badge-read'}">${msg.status || 'read'}</span></td>
-                    <td>View</td>
-                </tr>
-            `).join('');
-        }
-
-        function openMessageDetail(msg) {
-            const modal = document.getElementById('message-modal');
-            const content = document.getElementById('message-detail-content');
-            content.innerHTML = `
-                <p><strong>From:</strong> ${escapeHtml(msg.name)} (<a href="mailto:${escapeHtml(msg.email)}">${escapeHtml(msg.email)}</a>)</p>
-                <p><strong>Date:</strong> ${new Date(msg.received_at).toLocaleString()}</p>
-                <hr style="border: 0; border-top: 1px solid #eee; margin: 1rem 0;">
-                <p style="white-space: pre-wrap;">${escapeHtml(msg.message)}</p>
-            `;
-            document.getElementById('reply-link').href = `mailto:${msg.email}?subject=Re: Your message to Shinshu Solutions`;
-            modal.classList.add('active');
-        }
-        function closeMessageModal() { document.getElementById('message-modal').classList.remove('active'); }
-
-
-        // --- Content ---
-        async function loadContent() {
-            try {
-                const res = await fetch('/api/content');
-                const data = await res.json();
-                if (data.success) {
-                    contentData = data.content || {};
-                    renderContentEditor();
-                }
-            } catch (e) { console.error(e); }
-        }
-
-        function renderContentEditor() {
-            const container = document.getElementById('content-editor-form');
-            if (Object.keys(contentData).length === 0) {
-                container.innerHTML = `
-                    <p style="text-align: center;">No dynamic content keys found. Add keys to the database manually or wait for setup.</p>
-                    <!-- Temporary way to add key for testing -->
-                    <div class="form-group">
-                        <label>Add New Key (Dev Mode)</label>
-                        <div style="display: flex; gap: 10px;">
-                            <input type="text" id="new-key-name" placeholder="key_name">
-                            <input type="text" id="new-key-value" placeholder="Value">
-                            <button class="btn btn-outline" onclick="addKey()">Add</button>
-                        </div>
-                    </div>
-                `;
-                return;
-            }
-
-            container.innerHTML = Object.entries(contentData).map(([key, value]) => `
-                <div class="form-group">
-                    <label>${formatKey(key)} <small style="color: #999; font-weight: normal;">(${key})</small></label>
-                    <textarea data-key="${key}" rows="3">${escapeHtml(value)}</textarea>
-                </div>
-            `).join('');
-        }
-
-        async function saveContent() {
-            const inputs = document.querySelectorAll('#content-editor-form textarea');
-            const updates = {};
-            inputs.forEach(input => {
-                updates[input.dataset.key] = input.value;
-            });
-
-            const res = await fetch('/api/content', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ updates })
-            });
-            if (res.ok) alert('Saved!');
-            else alert('Error saving');
-        }
-
-        async function addKey() {
-            const key = document.getElementById('new-key-name').value;
-            const value = document.getElementById('new-key-value').value;
-            if (!key) return;
-            contentData[key] = value;
-            renderContentEditor();
-            // Auto save
-            await fetch('/api/content', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ updates: { [key]: value } })
-            });
-        }
-
-
-        // --- Utils ---
-        function formatBytes(bytes) {
-            if (bytes === 0) return '0 Bytes';
-            const k = 1024;
-            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-            const i = Math.floor(Math.log(bytes) / Math.log(k));
-            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-        }
-        function escapeHtml(text) {
-            if (!text) return '';
-            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
-        }
-        function formatKey(key) {
-            return key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-        }
-
-        const ws = new WebSocket('wss://' + window.location.host + '/api/ws'); // Placeholder if needed
     </script>
 </body>
 

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inbox - Shinshu Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png"
+        href="https://pub-c341cc62c3274ccba5aa77286b26fb90.r2.dev/iconography/shinshu-solutions-icon.png">
+    <link rel="stylesheet" href="/dash-style.css">
+</head>
+
+<body>
+
+    <script src="/dash-sidebar.js"></script>
+    <script>renderSidebar('inbox');</script>
+
+    <main>
+        <header>
+            <h2>Inbox</h2>
+            <div style="font-size: 0.9rem; color: #666;">Messages from Contact Form</div>
+        </header>
+
+        <div class="card">
+            <table id="messages-table">
+                <thead>
+                    <tr>
+                        <th>From</th>
+                        <th>Email</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="5" style="text-align: center; padding: 2rem;">Loading messages...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <!-- Message Detail Modal -->
+    <div class="modal-overlay" id="message-modal">
+        <div class="modal">
+            <h3 style="margin-top: 0; margin-bottom: 0.5rem; color: var(--primary);">Message Details</h3>
+            <div id="message-detail-content"></div>
+            <div style="display: flex; justify-content: flex-end; margin-top: 1.5rem; gap: 1rem;">
+                <button class="btn btn-outline"
+                    onclick="document.getElementById('message-modal').classList.remove('active')">Close</button>
+                <a id="reply-link" href="#" class="btn btn-primary" style="text-decoration: none;">Reply via Email</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let messages = [];
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const user = await checkAuth();
+            if (!user) return;
+            loadMessages();
+        });
+
+        async function loadMessages() {
+            try {
+                const res = await fetch('/api/messages');
+                const data = await res.json();
+                if (data.success) {
+                    messages = data.messages;
+                    renderMessages();
+                }
+            } catch (e) { console.error(e); }
+        }
+
+        function renderMessages() {
+            const tbody = document.querySelector('#messages-table tbody');
+            if (messages.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 2rem; color: #888;">No messages received yet.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = messages.map(msg => `
+                <tr style="cursor: pointer" onclick='openMessageDetail(${JSON.stringify(msg).replace(/'/g, "&#39;")})'>
+                    <td><strong>${escapeHtml(msg.name)}</strong></td>
+                    <td>${escapeHtml(msg.email)}</td>
+                    <td>${new Date(msg.received_at).toLocaleDateString()} ${new Date(msg.received_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</td>
+                    <td><span class="badge ${msg.status === 'unread' ? 'badge-new' : 'badge-read'}">${msg.status || 'read'}</span></td>
+                    <td><span style="color: var(--primary); font-weight: 500;">View</span></td>
+                </tr>
+            `).join('');
+        }
+
+        function openMessageDetail(msg) {
+            const modal = document.getElementById('message-modal');
+            const content = document.getElementById('message-detail-content');
+            content.innerHTML = `
+                <div style="background: #fdfdfd; padding: 1rem; border-radius: 8px; border: 1px solid #eee; margin-bottom: 1rem;">
+                    <p style="margin: 0 0 0.5rem;"><strong>From:</strong> ${escapeHtml(msg.name)} &lt;${escapeHtml(msg.email)}&gt;</p>
+                    <p style="margin: 0; font-size: 0.9rem; color: #666;"><strong>Received:</strong> ${new Date(msg.received_at).toLocaleString()}</p>
+                </div>
+                <div style="white-space: pre-wrap; font-family: inherit; line-height: 1.6; color: #333;">${escapeHtml(msg.message)}</div>
+            `;
+            document.getElementById('reply-link').href = `mailto:${msg.email}?subject=Re: Your message to Shinshu Solutions`;
+            modal.classList.add('active');
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+        }
+    </script>
+</body>
+
+</html>

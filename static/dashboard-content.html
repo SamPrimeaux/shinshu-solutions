@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Site Content - Shinshu Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png"
+        href="https://pub-c341cc62c3274ccba5aa77286b26fb90.r2.dev/iconography/shinshu-solutions-icon.png">
+    <link rel="stylesheet" href="/dash-style.css">
+</head>
+
+<body>
+
+    <script src="/dash-sidebar.js"></script>
+    <script>renderSidebar('content');</script>
+
+    <main>
+        <header>
+            <h2>Site Content Editor</h2>
+            <button class="btn btn-primary" onclick="saveContent()">Save Changes</button>
+        </header>
+
+        <div class="card">
+            <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Edit key text areas of your public website.
+                Changes take effect safely and immediately.</p>
+            <div id="content-editor-form">
+                <div style="text-align: center; padding: 2rem;">Loading content...</div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let contentData = {};
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const user = await checkAuth();
+            if (!user) return;
+            loadContent();
+        });
+
+        async function loadContent() {
+            try {
+                const res = await fetch('/api/content');
+                const data = await res.json();
+                if (data.success) {
+                    contentData = data.content || {};
+                    renderContentEditor();
+                }
+            } catch (e) { console.error(e); }
+        }
+
+        function renderContentEditor() {
+            const container = document.getElementById('content-editor-form');
+            if (Object.keys(contentData).length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 2rem; background: #f9f9f9; border-radius: 8px;">
+                        <p>No editable content blocks found yet.</p>
+                        <p style="font-size: 0.9rem; color: #666;">Site content logic is active. To make a section editable, the developer must tag it in the HTML.</p>
+                        <div style="margin-top: 1rem; padding: 1rem; border: 1px dashed #ccc;">
+                            <strong>Developer Note:</strong><br>
+                            Add <code>data-content-key="key_name"</code> to any HTML element to make it appear here.
+                        </div>
+                        
+                        <!-- Temporary Dev Tool -->
+                         <div style="margin-top: 2rem; text-align: left;">
+                            <label style="font-size: 0.85rem; font-weight: 600;">Add override key manually:</label>
+                            <div style="display: flex; gap: 10px; margin-top: 8px;">
+                                <input type="text" id="new-key-name" placeholder="e.g. home_hero_title">
+                                <button class="btn btn-outline" onclick="addKey()">Add</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = Object.entries(contentData).map(([key, value]) => `
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">
+                        ${formatKey(key)} 
+                        <span style="font-weight: normal; color: #999; font-size: 0.85rem; margin-left: 8px;">(${key})</span>
+                    </label>
+                    <textarea data-key="${key}" rows="3" style="font-family: monospace; line-height: 1.5;">${escapeHtml(value)}</textarea>
+                </div>
+            `).join('');
+        }
+
+        async function saveContent() {
+            const inputs = document.querySelectorAll('#content-editor-form textarea');
+            const updates = {};
+            inputs.forEach(input => {
+                updates[input.dataset.key] = input.value;
+            });
+
+            const btn = document.querySelector('header .btn-primary');
+            const original = btn.innerText;
+            btn.innerText = 'Saving...';
+            btn.disabled = true;
+
+            const res = await fetch('/api/content', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ updates })
+            });
+
+            if (res.ok) {
+                btn.innerText = 'Saved!';
+                setTimeout(() => { btn.innerText = original; btn.disabled = false; }, 2000);
+            } else {
+                alert('Error saving content');
+                btn.innerText = original;
+                btn.disabled = false;
+            }
+        }
+
+        async function addKey() {
+            const key = document.getElementById('new-key-name').value;
+            if (!key) return;
+            contentData[key] = ""; // Initialize empty
+            renderContentEditor();
+        }
+
+        function formatKey(key) {
+            return key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+        }
+        function escapeHtml(text) {
+            if (!text) return '';
+            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+        }
+    </script>
+</body>
+
+</html>

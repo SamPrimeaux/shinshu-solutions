@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Media Library - Shinshu Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png"
+        href="https://pub-c341cc62c3274ccba5aa77286b26fb90.r2.dev/iconography/shinshu-solutions-icon.png">
+    <link rel="stylesheet" href="/dash-style.css">
+</head>
+
+<body>
+
+    <script src="/dash-sidebar.js"></script>
+    <script>renderSidebar('media');</script>
+
+    <main>
+        <header>
+            <h2>Media Library</h2>
+            <button class="btn btn-primary" onclick="openUploadModal()">
+                <svg style="width: 18px; height: 18px; margin-right: 8px;" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
+                </svg>
+                Upload New
+            </button>
+        </header>
+
+        <div id="assets-loading" style="text-align: center; color: #666; padding: 2rem;">Loading library...</div>
+        <div id="assets-container" class="asset-grid"></div>
+
+    </main>
+
+    <!-- Upload Modal -->
+    <div class="modal-overlay" id="upload-modal">
+        <div class="modal">
+            <h3 style="margin-top: 0;">Upload Asset</h3>
+            <p style="font-size: 0.9rem; color: #666; margin-bottom: 1rem;">Upload images, documents, or other media.
+            </p>
+            <div style="margin-bottom: 1.5rem;">
+                <input type="file" id="file-input" style="border: 2px dashed #ddd; padding: 2rem; text-align: center;">
+            </div>
+            <div style="display: flex; justify-content: flex-end; gap: 1rem;">
+                <button class="btn btn-outline"
+                    onclick="document.getElementById('upload-modal').classList.remove('active')">Cancel</button>
+                <button class="btn btn-primary" onclick="uploadAsset()">Upload</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Preview Modal (Image/HTML) -->
+    <div class="modal-overlay" id="preview-modal" onclick="closePreview(event)">
+        <!-- Content injected dynamically -->
+    </div>
+
+    <script>
+        let assets = [];
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const user = await checkAuth();
+            if (!user) return;
+            loadAssets();
+        });
+
+        async function loadAssets() {
+            try {
+                const res = await fetch('/api/assets');
+                const data = await res.json();
+                if (data.success) {
+                    assets = data.assets;
+                    renderAssets();
+                    document.getElementById('assets-loading').style.display = 'none';
+                }
+            } catch (e) {
+                console.error(e);
+                document.getElementById('assets-loading').innerText = 'Error loading assets.';
+            }
+        }
+
+        function isSystemFile(key) {
+            return key.endsWith('.html') || key.endsWith('.js') || key.endsWith('.css') || key.includes('iconography/');
+        }
+
+        function renderAssets() {
+            const container = document.getElementById('assets-container');
+            container.innerHTML = assets.map(asset => {
+                const isImg = asset.type.startsWith('image/');
+                const isSystem = isSystemFile(asset.key);
+
+                return `
+                    <div class="asset-card" onclick="previewAsset('${asset.key}', '${asset.url}', '${asset.type}')">
+                        <div class="asset-thumb ${!isImg ? 'file-type' : ''}">
+                            ${isSystem ? '<div class="system-badge">SYSTEM</div>' : ''}
+                            ${isImg ? `<img src="${asset.url}" loading="lazy">` : `<span style="font-size: 2rem;">FILE</span><span style="font-size: 0.8rem;">${asset.type.split('/')[1] || 'UNK'}</span>`}
+                        </div>
+                        <div class="asset-meta">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                <div class="asset-name" title="${asset.key}" style="flex: 1; margin-right: 8px;">${asset.key}</div>
+                                ${!isSystem ?
+                        `<button class="btn-icon" onclick="event.stopPropagation(); deleteAsset('${asset.key}')" title="Delete">
+                                        <svg style="width: 16px; height: 16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                    </button>`
+                        : ''}
+                            </div>
+                            <div class="asset-size">${formatBytes(asset.size)}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function previewAsset(key, url, type) {
+            const modal = document.getElementById('preview-modal');
+            modal.innerHTML = ''; // Clear
+
+            if (type.startsWith('image/')) {
+                modal.innerHTML = `
+                    <div style="max-width: 90%; max-height: 90%; position: relative;" onclick="event.stopPropagation()">
+                         <img src="${url}" style="max-width: 100%; max-height: 80vh; border-radius: 8px; box-shadow: 0 20px 50px rgba(0,0,0,0.2);">
+                         <div style="text-align: center; color: white; margin-top: 1rem;">
+                             <p><strong>${key}</strong></p>
+                             <a href="${url}" target="_blank" style="color: #FF8C42; text-decoration: none;">Open Original</a>
+                         </div>
+                    </div>
+                `;
+            } else if (type.includes('html') || type.includes('text') || key.endsWith('.html')) {
+                // Iframe preview for HTML
+                modal.innerHTML = `
+                    <div class="lightbox-iframe" onclick="event.stopPropagation()">
+                        <div style="padding: 1rem; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; background: #f9f9f9;">
+                             <strong>Preview: ${key}</strong>
+                             <button class="btn btn-outline" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;" onclick="closePreview()">Close</button>
+                        </div>
+                        <iframe src="${url}"></iframe>
+                         <div style="padding: 0.5rem 1rem; background: #fff4e5; color: #c05621; font-size: 0.85rem; border-top: 1px solid #fed7d7;">
+                            ⚠️ <strong>System File:</strong> Editing or deleting this file can break your website. Please use the 'Site Content' tab to safely edit text.
+                        </div>
+                    </div>
+                `;
+            } else {
+                modal.innerHTML = `
+                     <div class="modal active" onclick="event.stopPropagation()">
+                        <h3>File Details</h3>
+                        <p><strong>Name:</strong> ${key}</p>
+                        <p><strong>Type:</strong> ${type}</p>
+                        <p><a href="${url}" target="_blank" class="btn btn-primary">Download / View</a></p>
+                        <button class="btn btn-outline" style="margin-top: 1rem;" onclick="closePreview()">Close</button>
+                    </div>
+                `;
+            }
+            modal.style.display = 'flex';
+        }
+
+        function closePreview(e) {
+            if (e) e.stopPropagation();
+            document.getElementById('preview-modal').style.display = 'none';
+        }
+
+        async function deleteAsset(key) {
+            if (!confirm(`Delete ${key}? This cannot be undone.`)) return;
+            const res = await fetch(`/api/assets/${encodeURIComponent(key)}`, { method: 'DELETE' });
+            if (res.ok) loadAssets();
+            else alert('Failed to delete.');
+        }
+
+        async function uploadAsset() {
+            const fileInput = document.getElementById('file-input');
+            if (fileInput.files.length === 0) return;
+
+            const file = fileInput.files[0];
+            const formData = new FormData();
+            formData.append('file', file);
+
+            const btn = document.querySelector('#upload-modal .btn-primary');
+            btn.innerText = 'Uploading...'; btn.disabled = true;
+
+            try {
+                const res = await fetch('/api/assets/upload', { method: 'POST', body: formData });
+                if (res.ok) {
+                    document.getElementById('upload-modal').classList.remove('active');
+                    loadAssets();
+                    fileInput.value = '';
+                } else alert('Upload failed');
+            } catch (e) { console.error(e); }
+            btn.innerText = 'Upload'; btn.disabled = false;
+        }
+
+        function openUploadModal() { document.getElementById('upload-modal').classList.add('active'); }
+
+        function formatBytes(bytes, decimals = 2) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const dm = decimals < 0 ? 0 : decimals;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+        }
+    </script>
+</body>
+
+</html>
