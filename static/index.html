@@ -1,9 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shinshu Solutions</title>
+    <title>Shinshu Solutions - Opening Nagano to the World</title>
+    <meta name="description"
+        content="Professional bilingual consulting services for foreign real estate investors in Nagano, Japan. Translation, client liaison, and project support.">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Roboto+Mono:wght@400;500;700&display=swap"
+        rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -11,181 +17,280 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --orange-primary: #FF8C42;
+            --orange-dark: #E67635;
+            --text-dark: #1A1A1A;
+            --text-gray: #666;
+        }
+
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+        }
+
+        /* Navigation */
+        nav {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            justify-content: center;
-            padding: 20px;
         }
 
-        .container {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 60px 40px;
-            max-width: 600px;
-            width: 100%;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            text-align: center;
-            animation: fadeIn 0.6s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        h1 {
-            font-size: 3rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        .logo {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--orange-primary), var(--orange-dark));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 20px;
-            font-weight: 800;
+            text-decoration: none;
         }
 
-        p {
-            color: #4a5568;
-            font-size: 1.1rem;
-            line-height: 1.8;
-            margin-bottom: 30px;
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
         }
 
-        .status {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            background: #10b981;
+        .nav-links a {
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--orange-primary);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, rgba(255, 140, 66, 0.9), rgba(230, 118, 53, 0.9)),
+                url('https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=1920') center/cover;
             color: white;
-            padding: 12px 24px;
-            border-radius: 50px;
-            font-weight: 600;
-            margin-bottom: 30px;
-            animation: pulse 2s infinite;
+            padding: 8rem 2rem;
+            text-align: center;
         }
 
-        @keyframes pulse {
-            0%, 100% {
-                opacity: 1;
-            }
-            50% {
-                opacity: 0.8;
-            }
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
         }
 
-        .status::before {
-            content: '';
-            width: 10px;
-            height: 10px;
-            background: white;
-            border-radius: 50%;
-            animation: blink 1.5s infinite;
+        .hero p {
+            font-size: 1.5rem;
+            max-width: 800px;
+            margin: 0 auto 2rem;
         }
 
-        @keyframes blink {
-            0%, 100% {
-                opacity: 1;
-            }
-            50% {
-                opacity: 0.3;
-            }
+        /* Content Sections */
+        .section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
         }
 
-        .info-grid {
+        .section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: var(--text-dark);
+        }
+
+        .services-grid {
             display: grid;
-            gap: 15px;
-            margin-top: 30px;
-            text-align: left;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
         }
 
-        .info-item {
-            background: #f7fafc;
-            padding: 15px 20px;
-            border-radius: 10px;
-            border-left: 4px solid #667eea;
+        .service-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
         }
 
-        .info-item strong {
-            color: #2d3748;
-            display: block;
-            margin-bottom: 5px;
+        .service-card:hover {
+            transform: translateY(-5px);
         }
 
-        .info-item span {
-            color: #718096;
-            font-size: 0.95rem;
+        .service-card h3 {
+            color: var(--orange-primary);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
         }
 
-        .footer {
-            margin-top: 40px;
-            padding-top: 30px;
-            border-top: 2px solid #e2e8f0;
-            color: #718096;
-            font-size: 0.9rem;
+        /* Footer */
+        footer {
+            background: var(--text-dark);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
         }
 
-        a {
-            color: #667eea;
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--orange-primary);
+        }
+
+        .contact-info {
+            margin: 2rem 0;
+        }
+
+        .contact-info a {
+            color: var(--orange-primary);
+            text-decoration: none;
+        }
+
+        .btn-dashboard {
+            display: inline-block;
+            background: var(--orange-primary);
+            color: white;
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
             text-decoration: none;
             font-weight: 600;
-            transition: color 0.3s ease;
+            margin-top: 1rem;
+            transition: background 0.3s;
         }
 
-        a:hover {
-            color: #764ba2;
+        .btn-dashboard:hover {
+            background: var(--orange-dark);
         }
     </style>
 </head>
-<body>
-    <div class="container">
-        <h1>Shinshu Solutions</h1>
-        
-        <div class="status">
-            System Online
-        </div>
 
-        <p>
-            Welcome to Shinshu Solutions. This page is served from Cloudflare R2 storage,
-            demonstrating our cloud infrastructure capabilities.
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="/" class="logo">SHINSHU SOLUTIONS</a>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/about">About</a></li>
+                <li><a href="/services">Services</a></li>
+                <li><a href="/gallery">Gallery</a></li>
+                <li><a href="/contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <h1>Opening Nagano to the World</h1>
+        <p>Professional bilingual consulting services for foreign real estate investors in Nagano Prefecture</p>
+    </section>
+
+    <section class="section">
+        <h2>Navigating Real Estate Investment in Japan</h2>
+        <p style="font-size: 1.2rem; color: var(--text-gray); margin-bottom: 2rem;">
+            Shinshu Solutions is a Nagano-based bilingual consulting service operated by Jake Waalk,
+            specializing in supporting foreign real estate investors and Japanese construction firms.
         </p>
 
-        <div class="info-grid">
-            <div class="info-item">
-                <strong>🚀 Platform</strong>
-                <span>Cloudflare Workers + R2 + D1</span>
+        <div class="services-grid">
+            <div class="service-card">
+                <h3>🗣️ Translation & Interpretation</h3>
+                <p>Professional Japanese-English translation and interpretation services for all your real estate needs.
+                </p>
             </div>
-            <div class="info-item">
-                <strong>📧 Contact</strong>
-                <span>jawaalk@shinshusolutions.com</span>
+            <div class="service-card">
+                <h3>🤝 Client Liaison Services</h3>
+                <p>Bridge the gap between foreign investors and Japanese businesses with expert cultural and business
+                    liaison.</p>
             </div>
-            <div class="info-item">
-                <strong>🌐 Infrastructure</strong>
-                <span>Global Edge Network</span>
+            <div class="service-card">
+                <h3>🔗 Introductions & Coordination</h3>
+                <p>Connect with trusted local contractors, real estate agents, and service providers in Nagano.</p>
             </div>
-            <div class="info-item">
-                <strong>⚡ Performance</strong>
-                <span>Sub-50ms Response Time</span>
+            <div class="service-card">
+                <h3>🏗️ Project Support</h3>
+                <p>Comprehensive support for renovation projects and property development from start to finish.</p>
+            </div>
+            <div class="service-card">
+                <h3>🏠 Property Management</h3>
+                <p>Ongoing property care and management services to protect your investment.</p>
+            </div>
+            <div class="service-card">
+                <h3>🌉 Cultural Bridge</h3>
+                <p>Navigate Japanese business culture and regulations with confidence and local expertise.</p>
             </div>
         </div>
+    </section>
 
-        <div class="footer">
-            <p>
-                Powered by <a href="https://www.cloudflare.com/" target="_blank">Cloudflare</a>
-            </p>
-            <p style="margin-top: 10px; font-size: 0.85rem;">
-                © 2026 Shinshu Solutions. All rights reserved.
+    <section class="section" style="background: #f8f9fa;">
+        <h2>Nagano Prefecture</h2>
+        <p style="font-size: 1.2rem; color: var(--text-gray);">
+            My service area is centered on the world-class ski resort <strong>Nozawa Onsen</strong>,
+            which was featured on the cover of Condé Nast Traveler as one of the world's top 9 ski resorts for the 2026
+            season.
+        </p>
+        <p style="font-size: 1.1rem; color: var(--text-gray); margin-top: 1rem;">
+            <strong>Service Areas:</strong> Nozawa Onsen, Iiyama, Shinano, Myoko, Karuizawa, and throughout Nagano
+            Prefecture.
+        </p>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="/">Home</a>
+                <a href="/about">About</a>
+                <a href="/services">Services</a>
+                <a href="/gallery">Gallery</a>
+                <a href="/contact">Contact</a>
+            </div>
+
+            <div class="contact-info">
+                <h3>Get in Touch</h3>
+                <p>Ready to start your real estate journey in Nagano?</p>
+                <p style="margin-top: 1rem;">
+                    <strong>Email:</strong> <a
+                        href="mailto:jawaalk@shinshusolutions.com">jawaalk@shinshusolutions.com</a>
+                </p>
+                <p style="margin-top: 0.5rem;">
+                    <strong>Location:</strong> Komoro, Nagano Prefecture, Japan (長野県小諸市)
+                </p>
+            </div>
+
+            <a href="/dashboard" class="btn-dashboard">Business Dashboard</a>
+
+            <p style="margin-top: 2rem; opacity: 0.7; font-size: 0.9rem;">
+                © 2026 Shinshu Solutions - All Rights Reserved<br>
+                <span style="opacity: 0.6; font-size: 0.85rem;">Built by InnerAnimalMedia</span>
             </p>
         </div>
-    </div>
+    </footer>
 </body>
+
 </html>

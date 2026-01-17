@@ -147,6 +147,35 @@ app.get('/api/r2-test', async (c) => {
     }
 });
 
+// Gallery images endpoint - list all images from R2
+app.get('/api/gallery/images', async (c) => {
+    try {
+        const listed = await c.env.R2.list({ limit: 1000 });
+
+        // Filter for image files
+        const images = listed.objects
+            .filter(obj => /\.(jpg|jpeg|png|gif|webp|svg)$/i.test(obj.key))
+            .map(obj => ({
+                key: obj.key,
+                url: `https://shinshusolutions.com/${obj.key}`,
+                size: obj.size,
+                uploaded: obj.uploaded,
+            }));
+
+        return c.json({
+            success: true,
+            count: images.length,
+            images,
+        });
+    } catch (error) {
+        return c.json({
+            success: false,
+            error: error instanceof Error ? error.message : 'Unknown error',
+        }, 500);
+    }
+});
+
+
 // Authentication: Login endpoint
 app.post('/api/auth/login', async (c) => {
     try {
