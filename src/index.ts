@@ -175,6 +175,49 @@ app.get('/api/gallery/images', async (c) => {
     }
 });
 
+// Contact form endpoint - send email via Resend
+app.post('/api/contact', async (c) => {
+    try {
+        const { name, email, message } = await c.req.json();
+
+        if (!name || !email || !message) {
+            return c.json({ success: false, error: 'All fields are required' }, 400);
+        }
+
+        // Send email via Resend
+        const response = await fetch('https://api.resend.com/emails', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${c.env.RESEND_API_KEY}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                from: c.env.RESEND_FROM_EMAIL,
+                to: 'jawaalk@shinshusolutions.com',
+                subject: `New Contact Form Submission from ${name}`,
+                html: `
+                    <h2>New Contact Form Submission</h2>
+                    <p><strong>From:</strong> ${name} (${email})</p>
+                    <p><strong>Message:</strong></p>
+                    <p>${message.replace(/\n/g, '<br>')}</p>
+                    <hr>
+                    <p style="color: #666; font-size: 0.9rem;">Sent from shinshusolutions.com contact form</p>
+                `,
+            }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to send email');
+        }
+
+        return c.json({ success: true, message: 'Email sent successfully' });
+    } catch (error) {
+        console.error('Contact form error:', error);
+        return c.json({ success: false, error: 'Failed to send message' }, 500);
+    }
+});
+
+
 
 // Authentication: Login endpoint
 app.post('/api/auth/login', async (c) => {

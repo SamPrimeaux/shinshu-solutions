@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - Shinshu Solutions</title>
+    <meta name="description"
+        content="Get in touch with Shinshu Solutions for your Nagano real estate consulting needs.">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Roboto+Mono:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --orange-primary: #FF8C42;
+            --orange-dark: #E67635;
+            --text-dark: #1A1A1A;
+            --text-gray: #666;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+        }
+
+        nav {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--orange-primary), var(--orange-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--orange-primary);
+        }
+
+        .hero {
+            background: linear-gradient(135deg, var(--orange-primary), var(--orange-dark));
+            color: white;
+            padding: 5rem 2rem;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .contact-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .contact-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 1.5rem;
+            background: linear-gradient(135deg, var(--orange-primary), var(--orange-dark));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .contact-icon svg {
+            width: 30px;
+            height: 30px;
+            stroke: white;
+            fill: none;
+            stroke-width: 2;
+        }
+
+        .contact-card h3 {
+            color: var(--orange-primary);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .contact-card p {
+            color: var(--text-gray);
+            font-size: 1.1rem;
+        }
+
+        .contact-card a {
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .contact-card a:hover {
+            color: var(--orange-primary);
+        }
+
+        footer {
+            background: var(--text-dark);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            color: var(--orange-primary);
+        }
+
+        .btn-dashboard {
+            display: inline-block;
+            background: var(--orange-primary);
+            color: white;
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="/" class="logo">SHINSHU SOLUTIONS</a>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/about">About</a></li>
+                <li><a href="/services">Services</a></li>
+                <li><a href="/gallery">Gallery</a></li>
+                <li><a href="/contact" class="active">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <h1>Get in Touch</h1>
+        <p>Ready to start your real estate journey in Nagano?</p>
+    </section>
+
+    <section class="section">
+        <div class="contact-grid">
+            <div class="contact-card">
+                <div class="contact-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                        <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
+                </div>
+                <h3>Email</h3>
+                <p><a href="mailto:jawaalk@shinshusolutions.com">jawaalk@shinshusolutions.com</a></p>
+            </div>
+
+            <div class="contact-card">
+                <div class="contact-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                        <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                </div>
+                <h3>Location</h3>
+                <p>Komoro, Nagano Prefecture, Japan</p>
+                <p style="font-size: 0.9rem; margin-top: 0.5rem;">長野県小諸市</p>
+            </div>
+
+            <div class="contact-card">
+                <div class="contact-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                    </svg>
+                </div>
+                <h3>Service Areas</h3>
+                <p>Nozawa Onsen, Iiyama, Shinano, Myoko, Karuizawa</p>
+            </div>
+        </div>
+
+        <div
+            style="max-width: 600px; margin: 4rem auto 0; background: white; padding: 3rem; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
+            <h2 style="text-align: center; margin-bottom: 2rem; color: var(--orange-primary);">Send a Message</h2>
+            <form id="contact-form">
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Name</label>
+                    <input type="text" name="name" required
+                        style="width: 100%; padding: 0.75rem; border: 2px solid #e0e0e0; border-radius: 8px; font-family: 'Roboto', sans-serif; font-size: 1rem;">
+                </div>
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Email</label>
+                    <input type="email" name="email" required
+                        style="width: 100%; padding: 0.75rem; border: 2px solid #e0e0e0; border-radius: 8px; font-family: 'Roboto', sans-serif; font-size: 1rem;">
+                </div>
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Message</label>
+                    <textarea name="message" required rows="5"
+                        style="width: 100%; padding: 0.75rem; border: 2px solid #e0e0e0; border-radius: 8px; font-family: 'Roboto', sans-serif; font-size: 1rem; resize: vertical;"></textarea>
+                </div>
+                <button type="submit"
+                    style="width: 100%; padding: 1rem; background: linear-gradient(135deg, var(--orange-primary), var(--orange-dark)); color: white; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: transform 0.3s;">
+                    Send Message
+                </button>
+            </form>
+            <div id="form-message" style="margin-top: 1rem; padding: 1rem; border-radius: 8px; display: none;"></div>
+        </div>
+    </section>
+
+    <script>
+        document.getElementById('contact-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const form = e.target;
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData);
+            const messageDiv = document.getElementById('form-message');
+            const submitBtn = form.querySelector('button[type="submit"]');
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Sending...';
+
+            try {
+                const response = await fetch('/api/contact', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    messageDiv.style.display = 'block';
+                    messageDiv.style.background = 'rgba(76, 175, 80, 0.1)';
+                    messageDiv.style.color = '#4CAF50';
+                    messageDiv.style.border = '1px solid #4CAF50';
+                    messageDiv.textContent = 'Message sent successfully! We\'ll get back to you soon.';
+                    form.reset();
+                } else {
+                    throw new Error(result.error || 'Failed to send message');
+                }
+            } catch (error) {
+                messageDiv.style.display = 'block';
+                messageDiv.style.background = 'rgba(211, 47, 47, 0.1)';
+                messageDiv.style.color = '#D32F2F';
+                messageDiv.style.border = '1px solid #D32F2F';
+                messageDiv.textContent = 'Failed to send message. Please email us directly.';
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Send Message';
+            }
+        });
+    </script>
+
+    <footer>
+        <div class="footer-links">
+            <a href="/">Home</a>
+            <a href="/about">About</a>
+            <a href="/services">Services</a>
+            <a href="/gallery">Gallery</a>
+            <a href="/contact">Contact</a>
+        </div>
+        <p><strong>Email:</strong> <a href="mailto:jawaalk@shinshusolutions.com"
+                style="color: var(--orange-primary);">jawaalk@shinshusolutions.com</a></p>
+        <a href="/dashboard" class="btn-dashboard">Business Dashboard</a>
+        <p style="margin-top: 2rem; opacity: 0.7; font-size: 0.9rem;">
+            © 2026 Shinshu Solutions - All Rights Reserved<br>
+            <span style="opacity: 0.6; font-size: 0.85rem;">Built by InnerAnimalMedia</span>
+        </p>
+    </footer>
+</body>
+
+</html>
