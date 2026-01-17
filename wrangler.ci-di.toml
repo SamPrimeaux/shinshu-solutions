@@ -1,0 +1,31 @@
+name = "shinshu-solutions-ci-di"
+main = "src/index.ts"
+compatibility_date = "2024-01-01"
+account_id = "e3b02eefdc01c8bd458e608e6cffccb8"
+
+# Workers.dev subdomain only (no custom domains for CI/CD)
+workers_dev = true
+
+# D1 Database Configuration
+[[d1_databases]]
+binding = "DB"
+database_name = "shinshu-solutions"
+database_id = "b3463aea-6a59-4794-9f9d-e9a56167fb46"
+
+# R2 Bucket Configuration
+[[r2_buckets]]
+binding = "R2"
+bucket_name = "shinshu-solutions"
+
+# Observability Configuration
+[observability]
+enabled = true
+head_sampling_rate = 1
+
+[observability.logs]
+enabled = true
+invocation_logs = true
+
+# Environment Variables
+[vars]
+ENVIRONMENT = "ci-di"

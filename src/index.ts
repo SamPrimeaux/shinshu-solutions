@@ -1,4 +1,6 @@
 import { Hono } from 'hono';
+import { getCookie, setCookie, deleteCookie } from 'hono/cookie';
+import { authenticateUser, createSession, getUserBySession, deleteSession } from './auth';
 
 // Define environment bindings
 interface Env {
@@ -11,7 +13,16 @@ interface Env {
     ENVIRONMENT: string;
 }
 
-const app = new Hono<{ Bindings: Env }>();
+type Variables = {
+    user?: {
+        id: string;
+        email: string;
+        name: string;
+        role: string;
+    };
+};
+
+const app = new Hono<{ Bindings: Env; Variables: Variables }>();
 
 // Content-Type mapping for common file extensions
 const CONTENT_TYPES: Record<string, string> = {
@@ -135,6 +146,99 @@ app.get('/api/r2-test', async (c) => {
         }, 500);
     }
 });
+
+// Authentication: Login endpoint
+app.post('/api/auth/login', async (c) => {
+    try {
+        const { email, password } = await c.req.json();
+
+        if (!email || !password) {
+            return c.json({ success: false, error: 'Email and password are required' }, 400);
+        }
+
+        // Authenticate user
+        const user = await authenticateUser(c.env.DB, email, password);
+
+        if (!user) {
+            return c.json({ success: false, error: 'Invalid email or password' }, 401);
+        }
+
+        // Create session
+        const sessionId = await createSession(c.env.DB, user.id);
+
+        // Set session cookie (7 days)
+        setCookie(c, 'session_id', sessionId, {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'Lax',
+            maxAge: 7 * 24 * 60 * 60, // 7 days
+            path: '/',
+        });
+
+        return c.json({
+            success: true,
+            user: {
+                id: user.id,
+                email: user.email,
+                name: user.name,
+                role: user.role,
+            },
+        });
+    } catch (error) {
+        console.error('Login error:', error);
+        return c.json({ success: false, error: 'Authentication failed' }, 500);
+    }
+});
+
+// Authentication: Logout endpoint
+app.post('/api/auth/logout', async (c) => {
+    try {
+        const sessionId = getCookie(c, 'session_id');
+
+        if (sessionId) {
+            await deleteSession(c.env.DB, sessionId);
+        }
+
+        deleteCookie(c, 'session_id', { path: '/' });
+
+        return c.json({ success: true, message: 'Logged out successfully' });
+    } catch (error) {
+        console.error('Logout error:', error);
+        return c.json({ success: false, error: 'Logout failed' }, 500);
+    }
+});
+
+// Authentication: Check session endpoint
+app.get('/api/auth/me', async (c) => {
+    try {
+        const sessionId = getCookie(c, 'session_id');
+
+        if (!sessionId) {
+            return c.json({ success: false, error: 'Not authenticated' }, 401);
+        }
+
+        const user = await getUserBySession(c.env.DB, sessionId);
+
+        if (!user) {
+            deleteCookie(c, 'session_id', { path: '/' });
+            return c.json({ success: false, error: 'Session expired' }, 401);
+        }
+
+        return c.json({
+            success: true,
+            user: {
+                id: user.id,
+                email: user.email,
+                name: user.name,
+                role: user.role,
+            },
+        });
+    } catch (error) {
+        console.error('Session check error:', error);
+        return c.json({ success: false, error: 'Session check failed' }, 500);
+    }
+});
+
 
 // Catch-all route for serving pages from R2
 app.get('*', async (c) => {
