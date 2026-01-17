@@ -60,7 +60,7 @@
         }
 
         .logo img {
-            height: 100px;
+            height: 135px;
             /* Slightly smaller than 120 to fit slim header, or keep large if desired. Let's try 100px with less padding */
             width: auto;
             object-fit: contain;
@@ -93,9 +93,30 @@
             text-decoration: none;
             font-weight: 500;
             transition: color 0.3s;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--orange-primary);
+            transition: width 0.3s ease;
         }
 
         .nav-links a:hover {
+            color: var(--orange-primary);
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .nav-links a.active {
             color: var(--orange-primary);
         }
 
@@ -224,7 +245,7 @@
                     alt="Shinshu Solutions Logo">
             </a>
             <ul class="nav-links">
-                <li><a href="/">Home</a></li>
+                <li><a href="/" class="active">Home</a></li>
                 <li><a href="/about">About</a></li>
                 <li><a href="/services">Services</a></li>
                 <li><a href="/gallery">Gallery</a></li>
