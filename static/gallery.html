@@ -75,15 +75,40 @@
         }
 
         .hero {
-            background: linear-gradient(135deg, var(--orange-primary), var(--orange-dark));
+            background: linear-gradient(135deg, rgba(255, 140, 66, 0.7), rgba(230, 118, 53, 0.7)),
+                url('https://pub-c341cc62c3274ccba5aa77286b26fb90.r2.dev/jakewaalkimages/september252021-jakemountainpic.jpg') center/cover;
             color: white;
-            padding: 5rem 2rem;
+            padding: 8rem 2rem;
             text-align: center;
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.2);
+            z-index: 0;
+        }
+
+        .hero h1,
+        .hero p {
+            position: relative;
+            z-index: 1;
         }
 
         .hero h1 {
-            font-size: 3rem;
+            font-size: 3.5rem;
             margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
         }
 
         .section {
@@ -281,25 +306,31 @@
     </footer>
 
     <script>
+        // Jake's images from public R2 bucket
+        const jakeImages = [
+            {
+                url: 'https://pub-c341cc62c3274ccba5aa77286b26fb90.r2.dev/jakewaalkimages/september252021-jakemountainpic.jpg',
+                title: 'Jake on the Mountain - September 2021'
+            },
+            // Add more images here as they're uploaded
+        ];
+
         async function loadGallery() {
             try {
-                const response = await fetch('/api/gallery/images');
-                const data = await response.json();
-
                 document.getElementById('loading').style.display = 'none';
 
-                if (data.success && data.images && data.images.length > 0) {
+                if (jakeImages.length > 0) {
                     const gallery = document.getElementById('gallery');
                     gallery.style.display = 'grid';
 
-                    data.images.forEach(image => {
+                    jakeImages.forEach(image => {
                         const item = document.createElement('div');
                         item.className = 'gallery-item';
                         item.onclick = () => openLightbox(image.url);
 
                         const img = document.createElement('img');
                         img.src = image.url;
-                        img.alt = image.key;
+                        img.alt = image.title || 'Gallery image';
                         img.loading = 'lazy';
 
                         item.appendChild(img);
