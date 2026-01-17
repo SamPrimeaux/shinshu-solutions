@@ -35,6 +35,10 @@ head_sampling_rate = 1
 enabled = true
 invocation_logs = true
 
+[observability.traces]
+enabled = true
+head_sampling_rate = 1
+
 # Environment Variables
 [vars]
 ENVIRONMENT = "production"

@@ -10,6 +10,10 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Roboto+Mono:wght@400;500;700&display=swap"
         rel="stylesheet">
+    <link rel="icon" type="image/png"
+        href="https://pub-c341cc62c3274ccba5aa77286b26fb90.r2.dev/iconography/shinshu-solutions-icon.png">
+    <link rel="apple-touch-icon"
+        href="https://pub-c341cc62c3274ccba5aa77286b26fb90.r2.dev/iconography/shinshu-solutions-icon.png">
     <style>
         * {
             margin: 0;
@@ -55,6 +59,15 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 40px;
+            width: 40px;
+            margin-right: 12px;
+            object-fit: contain;
         }
 
         .nav-links {
@@ -189,7 +202,11 @@
 <body>
     <nav>
         <div class="nav-container">
-            <a href="/" class="logo">SHINSHU SOLUTIONS</a>
+            <a href="/" class="logo">
+                <img src="https://pub-c341cc62c3274ccba5aa77286b26fb90.r2.dev/iconography/shinshu-solutions-icon.png"
+                    alt="Shinshu Solutions Logo">
+                SHINSHU SOLUTIONS
+            </a>
             <ul class="nav-links">
                 <li><a href="/">Home</a></li>
                 <li><a href="/about">About</a></li>
