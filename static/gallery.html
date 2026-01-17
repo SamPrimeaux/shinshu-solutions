@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gallery - Shinshu Solutions</title>
-    <meta name="description" content="Photo gallery showcasing Nagano Prefecture and our projects">
+    <meta name="description"
+        content="Explore the beautiful landscapes and properties of Nagano Prefecture through our gallery.">
     <link
         href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Roboto+Mono:wght@400;500;700&display=swap"
         rel="stylesheet">
@@ -31,6 +32,9 @@
             font-family: 'Roboto', sans-serif;
             line-height: 1.6;
             color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
         nav {
@@ -97,8 +101,7 @@
             transition: width 0.3s ease;
         }
 
-        .nav-links a:hover,
-        .nav-links a.active {
+        .nav-links a:hover {
             color: var(--orange-primary);
         }
 
@@ -107,13 +110,18 @@
             width: 100%;
         }
 
+        .nav-links a.active {
+            color: var(--orange-primary);
+        }
+
+        /* Improved Hero Section */
         .hero {
-            background: linear-gradient(135deg, rgba(255, 140, 66, 0.7), rgba(230, 118, 53, 0.7)),
-                url('https://pub-c341cc62c3274ccba5aa77286b26fb90.r2.dev/jakewaalkimages/september252021-jakemountainpic.jpg') center/cover;
+            background: linear-gradient(135deg, var(--orange-primary), var(--orange-dark));
             color: white;
-            padding: 8rem 2rem;
+            padding: 6rem 2rem;
             text-align: center;
             position: relative;
+            overflow: hidden;
         }
 
         .hero::before {
@@ -123,12 +131,12 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.2);
+            background: url('https://images.unsplash.com/photo-1519967657934-8c017d72224d?w=1920&q=50') center/cover;
+            opacity: 0.2;
             z-index: 0;
         }
 
-        .hero h1,
-        .hero p {
+        .hero-content {
             position: relative;
             z-index: 1;
         }
@@ -136,66 +144,44 @@
         .hero h1 {
             font-size: 3.5rem;
             margin-bottom: 1rem;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
 
         .hero p {
-            font-size: 1.3rem;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
-        }
-
-        .section {
-            max-width: 1400px;
+            font-size: 1.25rem;
+            opacity: 0.95;
+            max-width: 600px;
             margin: 0 auto;
+        }
+
+        /* Gallery Grid */
+        .gallery-section {
             padding: 4rem 2rem;
-        }
-
-        .loading {
-            text-align: center;
-            padding: 3rem;
-        }
-
-        .loading-spinner {
-            border: 4px solid rgba(255, 140, 66, 0.2);
-            border-top: 4px solid var(--orange-primary);
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 1rem;
-        }
-
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
+            flex: 1;
+            max-width: 1600px;
+            margin: 0 auto;
+            width: 100%;
         }
 
         .gallery-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1.5rem;
-            margin-top: 2rem;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
         }
 
         .gallery-item {
-            position: relative;
-            overflow: hidden;
             border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            background: white;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
             cursor: pointer;
-            transition: transform 0.3s, box-shadow 0.3s;
-            aspect-ratio: 4/3;
-            background: #f0f0f0;
+            height: 300px;
         }
 
         .gallery-item:hover {
             transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
         }
 
         .gallery-item img {
@@ -205,44 +191,23 @@
             display: block;
         }
 
-        .no-images {
-            text-align: center;
-            padding: 3rem;
-            color: var(--text-gray);
+        .gallery-item.loading {
+            background: #f0f0f0;
+            animation: pulse 1.5s infinite;
         }
 
-        .lightbox {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
+        @keyframes pulse {
+            0% {
+                opacity: 0.6;
+            }
 
-        .lightbox.active {
-            display: flex;
-        }
+            50% {
+                opacity: 1;
+            }
 
-        .lightbox img {
-            max-width: 90%;
-            max-height: 90%;
-            object-fit: contain;
-        }
-
-        .lightbox-close {
-            position: absolute;
-            top: 2rem;
-            right: 2rem;
-            color: white;
-            font-size: 3rem;
-            cursor: pointer;
-            background: none;
-            border: none;
+            100% {
+                opacity: 0.6;
+            }
         }
 
         footer {
@@ -250,7 +215,7 @@
             color: white;
             padding: 3rem 2rem;
             text-align: center;
-            margin-top: 4rem;
+            margin-top: auto;
         }
 
         .footer-links {
@@ -280,6 +245,34 @@
             font-weight: 600;
             margin-top: 1rem;
         }
+
+        /* Lightbox */
+        .lightbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            cursor: zoom-out;
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox img {
+            max-width: 100%;
+            max-height: 90vh;
+            border-radius: 4px;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+            cursor: auto;
+        }
     </style>
 </head>
 
@@ -301,28 +294,21 @@
     </nav>
 
     <section class="hero">
-        <h1>Gallery</h1>
-        <p>Discover the beauty of Nagano Prefecture</p>
-    </section>
-
-    <section class="section">
-        <div id="loading" class="loading">
-            <div class="loading-spinner"></div>
-            <p>Loading gallery...</p>
-        </div>
-
-        <div id="gallery" class="gallery-grid" style="display: none;"></div>
-
-        <div id="no-images" class="no-images" style="display: none;">
-            <h2>No images found</h2>
-            <p>Gallery images will appear here once uploaded to R2.</p>
+        <div class="hero-content">
+            <h1>Through the Lens</h1>
+            <p>Discovering the hidden beauty of the Japanese Alps</p>
         </div>
     </section>
 
-    <div id="lightbox" class="lightbox">
-        <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
-        <img id="lightbox-img" src="" alt="">
-    </div>
+    <section class="gallery-section">
+        <div id="gallery-grid" class="gallery-grid">
+            <!-- Placeholders while loading -->
+            <div class="gallery-item loading"></div>
+            <div class="gallery-item loading"></div>
+            <div class="gallery-item loading"></div>
+        </div>
+        <p id="error-msg" style="text-align: center; color: #666; margin-top: 2rem; display: none;"></p>
+    </section>
 
     <footer>
         <div class="footer-links">
@@ -341,90 +327,66 @@
         </p>
     </footer>
 
+    <div class="lightbox" id="lightbox" onclick="this.classList.remove('active')">
+        <img id="lightbox-img" src="" onclick="event.stopPropagation()">
+    </div>
+
     <script>
-        // Jake's images from R2 bucket
-        const jakeImages = [
-            {
-                url: 'https://pub-c341cc62c3274ccba5aa77286b26fb90.r2.dev/jakewaalkimages/september252021-jakemountainpic.jpg',
-                title: 'Jake on the Mountain - September 2021'
-            },
-            {
-                url: 'https://pub-c341cc62c3274ccba5aa77286b26fb90.r2.dev/jakewaalkimages/jakemountain.jpg',
-                title: 'Jake Mountain Summit'
-            },
-            {
-                url: 'https://pub-c341cc62c3274ccba5aa77286b26fb90.r2.dev/jakewaalkimages/jakemtnpic-10-27-2023.jpg',
-                title: 'Mountain Peak - October 2023'
-            },
-            {
-                url: 'https://pub-c341cc62c3274ccba5aa77286b26fb90.r2.dev/jakewaalkimages/jakeoverlookingmtn.jpg',
-                title: 'Overlooking the Mountains'
-            },
-            {
-                url: 'https://pub-c341cc62c3274ccba5aa77286b26fb90.r2.dev/jakewaalkimages/jakepic-Hachi-Kiretto.jpg',
-                title: 'Hachi Kiretto Trail'
-            },
-            {
-                url: 'https://pub-c341cc62c3274ccba5aa77286b26fb90.r2.dev/jakewaalkimages/japansnow.jpg',
-                title: 'Japan Snow Landscape'
-            },
-            {
-                url: 'https://pub-c341cc62c3274ccba5aa77286b26fb90.r2.dev/jakewaalkimages/march292019jakewaalkmountainpic.jpg',
-                title: 'Mountain Adventure - March 2019'
-            },
-            {
-                url: 'https://pub-c341cc62c3274ccba5aa77286b26fb90.r2.dev/jakewaalkimages/oct182020jakehike.jpg',
-                title: 'Hiking Trail - October 2020'
-            }
-        ];
-
-        async function loadGallery() {
-            try {
-                document.getElementById('loading').style.display = 'none';
-
-                if (jakeImages.length > 0) {
-                    const gallery = document.getElementById('gallery');
-                    gallery.style.display = 'grid';
-
-                    jakeImages.forEach(image => {
-                        const item = document.createElement('div');
-                        item.className = 'gallery-item';
-                        item.onclick = () => openLightbox(image.url);
-
-                        const img = document.createElement('img');
-                        img.src = image.url;
-                        img.alt = image.title || 'Gallery image';
-                        img.loading = 'lazy';
-
-                        item.appendChild(img);
-                        gallery.appendChild(item);
-                    });
-                } else {
-                    document.getElementById('no-images').style.display = 'block';
-                }
-            } catch (error) {
-                console.error('Failed to load gallery:', error);
-                document.getElementById('loading').style.display = 'none';
-                document.getElementById('no-images').style.display = 'block';
-            }
-        }
-
-        function openLightbox(url) {
-            document.getElementById('lightbox-img').src = url;
-            document.getElementById('lightbox').classList.add('active');
-        }
-
-        function closeLightbox() {
-            document.getElementById('lightbox').classList.remove('active');
-        }
-
-        // Close lightbox on escape key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') closeLightbox();
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchImages();
         });
 
-        // Load gallery on page load
-        loadGallery();
+        async function fetchImages() {
+            try {
+                const res = await fetch('/api/assets'); // Modified endpoint listing all assets
+                const data = await res.json();
+                
+                const grid = document.getElementById('gallery-grid');
+                grid.innerHTML = ''; // Clear loaders
+
+                if (data.success && data.assets) {
+                    // Filter for images only
+                    const images = data.assets.filter(a => /\.(jpg|jpeg|png|gif|webp|svg)$/i.test(a.key));
+                    
+                    if(images.length === 0) {
+                         document.getElementById('error-msg').innerText = 'No images found in the gallery.';
+                         document.getElementById('error-msg').style.display = 'block';
+                         return;
+                    }
+
+                    // Sort by upload date (newest first)
+                    images.sort((a,b) => new Date(b.uploaded) - new Date(a.uploaded));
+
+                    images.forEach(img => {
+                        const div = document.createElement('div');
+                        div.className = 'gallery-item';
+                        div.onclick = () => openLightbox(img.url);
+                        
+                        const image = document.createElement('img');
+                        image.src = img.url;
+                        image.alt = img.key;
+                        image.loading = 'lazy';
+                        
+                        div.appendChild(image);
+                        grid.appendChild(div);
+                    });
+                } else {
+                    throw new Error('Failed to load');
+                }
+            } catch (err) {
+                console.error(err);
+                document.getElementById('gallery-grid').innerHTML = '';
+                document.getElementById('error-msg').innerText = 'Unable to load gallery. Please try again later.';
+                document.getElementById('error-msg').style.display = 'block';
+            }
+        }
+        
+        function openLightbox(url) {
+            const lb = document.getElementById('lightbox');
+            const lbImg = document.getElementById('lightbox-img');
+            lbImg.src = url;
+            lb.classList.add('active');
+        }
     </script>
 </body>
 

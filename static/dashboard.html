@@ -4,396 +4,763 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Shinshu Solutions</title>
-    <meta name="description" content="Shinshu Solutions Admin Dashboard">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Roboto+Mono:wght@400;500;700&display=swap"
-        rel="stylesheet">
+    <title>Shinshu Solutions | Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="icon" type="image/png"
         href="https://pub-c341cc62c3274ccba5aa77286b26fb90.r2.dev/iconography/shinshu-solutions-icon.png">
-    <link rel="apple-touch-icon"
-        href="https://pub-c341cc62c3274ccba5aa77286b26fb90.r2.dev/iconography/shinshu-solutions-icon.png">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --primary: #FF8C42;
+            --primary-dark: #E67635;
+            --bg-light: #F9FAFB;
+            --border-color: #E5E7EB;
+            --text-main: #111827;
+            --text-muted: #6B7280;
+            --danger: #EF4444;
+            --success: #10B981;
         }
 
-        /* ... skipped CSS ... */
+        * {
+            box-sizing: border-box;
+            outline: none;
+        }
 
-        .header-title {
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-light);
+            color: var(--text-main);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Sidebar */
+        aside {
+            width: 260px;
+            background: white;
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            padding: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .brand {
             display: flex;
             align-items: center;
-            gap: 1rem;
+            gap: 12px;
+            margin-bottom: 2.5rem;
+            text-decoration: none;
+            color: var(--text-main);
         }
 
-        .header-logo-img {
-            height: 50px;
-            width: 50px;
+        .brand img {
+            width: 40px;
+            height: 40px;
             object-fit: contain;
-            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
         }
 
-        .header-title h1 {
-            font-family: 'Roboto Mono', monospace;
+        .brand h1 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin: 0;
+            letter-spacing: -0.01em;
+        }
+
+        nav button {
+            background: none;
+            border: none;
+            width: 100%;
+            text-align: left;
+            padding: 0.75rem 1rem;
+            border-radius: 6px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 0.25rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        nav button:hover {
+            background: var(--bg-light);
+            color: var(--text-main);
+        }
+
+        nav button.active {
+            background: #FFF7ED;
+            /* Light orange tint */
+            color: var(--primary-dark);
+            font-weight: 600;
+        }
+
+        .logout-btn {
+            margin-top: auto;
+            color: var(--danger) !important;
+        }
+
+        .logout-btn:hover {
+            background: #FEF2F2 !important;
+        }
+
+        /* Main Content */
+        main {
+            flex: 1;
+            padding: 2rem 3rem;
+            overflow-y: auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        /* Views */
+        .view-section {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .view-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Data Tables / Grids */
+        .card {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        th {
+            text-align: left;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.6rem;
+            border-radius: 99px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .badge-new {
+            background: #DBEAFE;
+            color: #1E40AF;
+        }
+
+        .badge-read {
+            background: var(--bg-light);
+            color: var(--text-muted);
+        }
+
+        /* Asset Grid */
+        .asset-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .asset-card {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .asset-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            border-color: var(--primary);
+        }
+
+        .asset-thumb {
+            height: 140px;
+            width: 100%;
+            background: #f4f4f4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .asset-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .asset-thumb.file-type {
             font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 0.2rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
         }
 
-        /* ... */
+        .asset-meta {
+            padding: 0.75rem;
+        }
+
+        .asset-name {
+            font-size: 0.85rem;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: 0.25rem;
+        }
+
+        .asset-size {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .btn-delete {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--danger);
+            color: var(--danger);
+            border-radius: 4px;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .asset-card:hover .btn-delete {
+            opacity: 1;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.6rem 1.2rem;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-outline {
+            background: white;
+            border-color: var(--border-color);
+            color: var(--text-main);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--text-muted);
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 0.9rem;
+        }
+
+        input:focus,
+        textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255, 140, 66, 0.1);
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            width: 90%;
+            max-width: 500px;
+        }
+
+        .modal.active {
+            display: flex;
+        }
     </style>
 </head>
 
 <body>
-    <div id="loading" class="loading">
-        <div class="loading-spinner"></div>
-        <p>Loading dashboard...</p>
-    </div>
 
-    <div id="dashboard" style="display: none;">
-        <header class="dashboard-header">
-            <div class="header-content">
-                <div class="header-title">
-                    <img src="https://pub-c341cc62c3274ccba5aa77286b26fb90.r2.dev/iconography/shinshu-solutions-icon.png"
-                        class="header-logo-img" alt="Shinshu Solutions">
-                    <div>
-                        <h1>SHINSHU SOLUTIONS</h1>
-                        <p>Admin Dashboard</p>
+    <!-- Sidebar -->
+    <aside>
+        <a href="/" class="brand">
+            <img src="https://pub-c341cc62c3274ccba5aa77286b26fb90.r2.dev/iconography/shinshu-solutions-icon.png"
+                alt="Logo">
+            <h1>SHINSHU ADMIN</h1>
+        </a>
+
+        <nav>
+            <button class="nav-item active" data-tab="overview">
+                <span>Overview</span>
+            </button>
+            <button class="nav-item" data-tab="inbox">
+                <span>Inbox</span>
+            </button>
+            <button class="nav-item" data-tab="content">
+                <span>Site Content</span>
+            </button>
+            <button class="nav-item" data-tab="assets">
+                <span>Media Assets</span>
+            </button>
+            <button class="nav-item logout-btn" onclick="logout()">
+                <span>Logout</span>
+            </button>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main>
+
+        <!-- Overview View -->
+        <section id="overview" class="view-section active">
+            <header>
+                <h2>Dashboard Overview</h2>
+            </header>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;">
+                <div class="card">
+                    <h3 style="margin: 0 0 0.5rem; font-size: 0.9rem; color: var(--text-muted);">Total Assets</h3>
+                    <p style="font-size: 2rem; font-weight: 600; margin: 0;" id="stat-assets">-</p>
+                </div>
+                <div class="card">
+                    <h3 style="margin: 0 0 0.5rem; font-size: 0.9rem; color: var(--text-muted);">New Messages</h3>
+                    <p style="font-size: 2rem; font-weight: 600; margin: 0;" id="stat-messages">-</p>
+                </div>
+                <div class="card">
+                    <h3 style="margin: 0 0 0.5rem; font-size: 0.9rem; color: var(--text-muted);">System Status</h3>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span style="width: 10px; height: 10px; background: var(--success); border-radius: 50%;"></span>
+                        <span style="font-weight: 500;">Operational</span>
                     </div>
                 </div>
-                <div class="user-info">
-                    display: flex;
-                    align-items: center;
-                    gap: 1.5rem;
-                    }
+            </div>
+        </section>
 
-                    .user-avatar {
-                    width: 50px;
-                    height: 50px;
-                    border-radius: 50%;
-                    background: rgba(255, 255, 255, 0.2);
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    font-size: 1.5rem;
-                    font-weight: 700;
-                    border: 2px solid rgba(255, 255, 255, 0.3);
-                    }
+        <!-- Inbox View -->
+        <section id="inbox" class="view-section">
+            <header>
+                <h2>Inbox</h2>
+            </header>
+            <div class="card">
+                <table id="messages-table">
+                    <thead>
+                        <tr>
+                            <th>From</th>
+                            <th>Email</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="5" style="text-align: center;">Loading...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
 
-                    .user-details h3 {
-                    font-size: 1.1rem;
-                    margin-bottom: 0.25rem;
-                    }
+        <!-- Content View -->
+        <section id="content" class="view-section">
+            <header>
+                <h2>Site Content Editor</h2>
+                <button class="btn btn-primary" onclick="saveContent()">Save Changes</button>
+            </header>
+            <div class="card">
+                <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Edit key text areas of your public website.
+                    Changes take effect immediately.</p>
+                <div id="content-editor-form">
+                    <!-- Dynamic Inputs -->
+                    <div style="text-align: center; padding: 2rem;">Loading content...</div>
+                </div>
+            </div>
+        </section>
 
-                    .user-details p {
-                    opacity: 0.8;
-                    font-size: 0.9rem;
-                    }
+        <!-- Assets View -->
+        <section id="assets" class="view-section">
+            <header>
+                <h2>Media Library</h2>
+                <button class="btn btn-primary" onclick="openUploadModal()">Upload New</button>
+            </header>
+            <div id="assets-container" class="asset-grid">
+                <!-- Assets loaded here -->
+            </div>
+        </section>
 
-                    .btn-logout {
-                    background: rgba(255, 255, 255, 0.2);
-                    border: 2px solid rgba(255, 255, 255, 0.3);
-                    color: white;
-                    padding: 0.75rem 1.5rem;
-                    border-radius: 8px;
-                    cursor: pointer;
-                    font-weight: 600;
-                    transition: all 0.3s ease;
-                    }
+    </main>
 
-                    .btn-logout:hover {
-                    background: rgba(255, 255, 255, 0.3);
-                    transform: translateY(-2px);
-                    }
+    <!-- Upload Modal -->
+    <div class="modal-overlay" id="upload-modal">
+        <div class="modal">
+            <h3 style="margin-top: 0;">Upload Asset</h3>
+            <div class="form-group">
+                <input type="file" id="file-input">
+            </div>
+            <div style="display: flex; justify-content: flex-end; gap: 1rem;">
+                <button class="btn btn-outline" onclick="closeUploadModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="uploadAsset()">Upload</button>
+            </div>
+        </div>
+    </div>
 
-                    .dashboard-container {
-                    max-width: 1400px;
-                    margin: 0 auto;
-                    padding: 2rem;
-                    }
+    <!-- Message Detail Modal -->
+    <div class="modal-overlay" id="message-modal">
+        <div class="modal">
+            <h3 style="margin-top: 0;">Message Details</h3>
+            <div id="message-detail-content"></div>
+            <div style="display: flex; justify-content: flex-end; margin-top: 1.5rem;">
+                <button class="btn btn-outline" onclick="closeMessageModal()">Close</button>
+                <a id="reply-link" href="#" class="btn btn-primary"
+                    style="margin-left: 10px; text-decoration: none;">Reply</a>
+            </div>
+        </div>
+    </div>
 
-                    .welcome-card {
-                    background: white;
-                    border-radius: 16px;
-                    padding: 2.5rem;
-                    margin-bottom: 2rem;
-                    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-                    }
+    <script>
+        // --- State ---
+        let assets = [];
+        let messages = [];
+        let contentData = {};
 
-                    .welcome-card h2 {
-                    font-size: 2rem;
-                    color: var(--text-dark);
-                    margin-bottom: 1rem;
-                    }
+        // --- Auth & Init ---
+        document.addEventListener('DOMContentLoaded', async () => {
+            const auth = await checkAuth();
+            if (!auth) return;
 
-                    .welcome-card p {
-                    color: var(--text-gray);
-                    font-size: 1.1rem;
-                    line-height: 1.6;
-                    }
+            // Load data
+            loadAssets();
+            loadMessages();
+            loadContent();
 
-                    .stats-grid {
-                    display: grid;
-                    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-                    gap: 1.5rem;
-                    margin-bottom: 2rem;
-                    }
+            // Setup Navigation
+            document.querySelectorAll('.nav-item').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const tab = btn.dataset.tab;
+                    if (!tab) return; // logout btn
 
-                    .stat-card {
-                    background: white;
-                    border-radius: 16px;
-                    padding: 2rem;
-                    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-                    transition: transform 0.3s ease, box-shadow 0.3s ease;
-                    }
+                    // UI Toggle
+                    document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
 
-                    .stat-card:hover {
-                    transform: translateY(-5px);
-                    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
-                    }
+                    document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
+                    document.getElementById(tab).classList.add('active');
+                });
+            });
+        });
 
-                    .stat-icon {
-                    width: 60px;
-                    height: 60px;
-                    border-radius: 12px;
-                    background: linear-gradient(135deg, var(--orange-light), var(--orange-primary));
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    font-size: 1.8rem;
-                    margin-bottom: 1.5rem;
-                    }
+        async function checkAuth() {
+            try {
+                const res = await fetch('/api/auth/me');
+                if (!res.ok) {
+                    window.location.href = '/login';
+                    return false;
+                }
+                return true;
+            } catch (e) {
+                window.location.href = '/login';
+                return false;
+            }
+        }
 
-                    .stat-value {
-                    font-size: 2.5rem;
-                    font-weight: 700;
-                    color: var(--text-dark);
-                    margin-bottom: 0.5rem;
-                    }
+        async function logout() {
+            await fetch('/api/auth/logout', { method: 'POST' });
+            window.location.href = '/login';
+        }
 
-                    .stat-label {
-                    color: var(--text-gray);
-                    font-size: 1rem;
-                    font-weight: 500;
-                    }
+        // --- Assets ---
+        async function loadAssets() {
+            try {
+                const res = await fetch('/api/assets');
+                const data = await res.json();
+                if (data.success) {
+                    assets = data.assets;
+                    renderAssets();
+                    document.getElementById('stat-assets').innerText = assets.length;
+                }
+            } catch (e) { console.error(e); }
+        }
 
-                    .quick-actions {
-                    background: white;
-                    border-radius: 16px;
-                    padding: 2rem;
-                    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-                    }
-
-                    .quick-actions h3 {
-                    font-size: 1.5rem;
-                    color: var(--text-dark);
-                    margin-bottom: 1.5rem;
-                    }
-
-                    .actions-grid {
-                    display: grid;
-                    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-                    gap: 1rem;
-                    }
-
-                    .action-btn {
-                    background: linear-gradient(135deg, var(--orange-light), var(--orange-primary));
-                    color: white;
-                    padding: 1.5rem;
-                    border-radius: 12px;
-                    text-align: center;
-                    text-decoration: none;
-                    font-weight: 600;
-                    transition: all 0.3s ease;
-                    display: block;
-                    }
-
-                    .action-btn:hover {
-                    transform: translateY(-3px);
-                    box-shadow: 0 8px 25px rgba(255, 140, 66, 0.4);
-                    }
-
-                    .action-btn span {
-                    display: block;
-                    font-size: 2rem;
-                    margin-bottom: 0.5rem;
-                    }
-
-                    .loading {
-                    text-align: center;
-                    padding: 3rem;
-                    }
-
-                    .loading-spinner {
-                    border: 4px solid rgba(255, 140, 66, 0.2);
-                    border-top: 4px solid var(--orange-primary);
-                    border-radius: 50%;
-                    width: 50px;
-                    height: 50px;
-                    animation: spin 1s linear infinite;
-                    margin: 0 auto 1rem;
-                    }
-
-                    @keyframes spin {
-                    0% {
-                    transform: rotate(0deg);
-                    }
-
-                    100% {
-                    transform: rotate(360deg);
-                    }
-                    }
-
-                    .error-message {
-                    background: rgba(211, 47, 47, 0.1);
-                    color: #D32F2F;
-                    padding: 1.5rem;
-                    border-radius: 12px;
-                    margin: 2rem 0;
-                    border: 1px solid rgba(211, 47, 47, 0.2);
-                    }
-                    </style>
-                    </head>
-
-                    <body>
-                        <div id="loading" class="loading">
-                            <div class="loading-spinner"></div>
-                            <p>Loading dashboard...</p>
+        function renderAssets() {
+            const container = document.getElementById('assets-container');
+            container.innerHTML = assets.map(asset => {
+                const isImg = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml'].includes(asset.type);
+                return `
+                    <div class="asset-card">
+                        <button class="btn-delete" onclick="deleteAsset('${asset.key}')">×</button>
+                        <div class="asset-thumb ${!isImg ? 'file-type' : ''}">
+                            ${isImg ? `<img src="${asset.url}" loading="lazy">` : 'FILE'}
                         </div>
-
-                        <div id="dashboard" style="display: none;">
-                            <header class="dashboard-header">
-                                <div class="header-content">
-                                    <div class="header-title">
-                                        <h1>SHINSHU SOLUTIONS</h1>
-                                        <p>Admin Dashboard</p>
-                                    </div>
-                                    <div class="user-info">
-                                        <div class="user-avatar" id="user-avatar">?</div>
-                                        <div class="user-details">
-                                            <h3 id="user-name">Loading...</h3>
-                                            <p id="user-email">Loading...</p>
-                                        </div>
-                                        <button class="btn-logout" id="logout-btn">Logout</button>
-                                    </div>
-                                </div>
-                            </header>
-
-                            <div class="dashboard-container">
-                                <div class="welcome-card">
-                                    <h2>Welcome back, <span id="welcome-name">Admin</span>! 🏔️</h2>
-                                    <p>Manage your Shinshu Solutions platform from this central dashboard. All systems
-                                        are operational.</p>
-                                </div>
-
-                                <div class="stats-grid">
-                                    <div class="stat-card">
-                                        <div class="stat-icon">📊</div>
-                                        <div class="stat-value">2</div>
-                                        <div class="stat-label">Active Users</div>
-                                    </div>
-                                    <div class="stat-card">
-                                        <div class="stat-icon">🏔️</div>
-                                        <div class="stat-value">7</div>
-                                        <div class="stat-label">Pages Published</div>
-                                    </div>
-                                    <div class="stat-card">
-                                        <div class="stat-icon">📁</div>
-                                        <div class="stat-value">10</div>
-                                        <div class="stat-label">R2 Assets</div>
-                                    </div>
-                                    <div class="stat-card">
-                                        <div class="stat-icon">⚡</div>
-                                        <div class="stat-value">100%</div>
-                                        <div class="stat-label">System Health</div>
-                                    </div>
-                                </div>
-
-                                <div class="quick-actions">
-                                    <h3>Quick Actions</h3>
-                                    <div class="actions-grid">
-                                        <a href="/" class="action-btn">
-                                            <span>🏠</span>
-                                            View Site
-                                        </a>
-                                        <a href="/about" class="action-btn">
-                                            <span>ℹ️</span>
-                                            About Page
-                                        </a>
-                                        <a href="/contact" class="action-btn">
-                                            <span>📧</span>
-                                            Contact
-                                        </a>
-                                        <a href="/gallery" class="action-btn">
-                                            <span>🖼️</span>
-                                            Gallery
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="asset-meta">
+                            <div class="asset-name" title="${asset.key}">${asset.key}</div>
+                            <div class="asset-size">${formatBytes(asset.size)}</div>
                         </div>
+                    </div>
+                `;
+            }).join('');
+        }
 
-                        <script>
-                            // Check authentication on page load
-                            async function checkAuth() {
-                                try {
-                                    const response = await fetch('/api/auth/me', {
-                                        credentials: 'include'
-                                    });
+        async function deleteAsset(key) {
+            if (!confirm(`Delete ${key}?`)) return;
+            const res = await fetch(`/api/assets/${encodeURIComponent(key)}`, { method: 'DELETE' });
+            if (res.ok) loadAssets();
+        }
 
-                                    const data = await response.json();
+        function openUploadModal() { document.getElementById('upload-modal').classList.add('active'); }
+        function closeUploadModal() { document.getElementById('upload-modal').classList.remove('active'); }
 
-                                    if (!data.success || !data.user) {
-                                        // Not authenticated - redirect to login
-                                        window.location.href = '/login';
-                                        return;
-                                    }
+        async function uploadAsset() {
+            const fileInput = document.getElementById('file-input');
+            if (fileInput.files.length === 0) return;
 
-                                    // User is authenticated - show dashboard
-                                    displayDashboard(data.user);
-                                } catch (error) {
-                                    console.error('Auth check failed:', error);
-                                    window.location.href = '/login';
-                                }
-                            }
+            const file = fileInput.files[0];
+            const formData = new FormData();
+            formData.append('file', file);
 
-                            function displayDashboard(user) {
-                                // Hide loading, show dashboard
-                                document.getElementById('loading').style.display = 'none';
-                                document.getElementById('dashboard').style.display = 'block';
+            const btn = document.querySelector('#upload-modal .btn-primary');
+            const originalText = btn.innerText;
+            btn.innerText = 'Uploading...';
+            btn.disabled = true;
 
-                                // Set user info
-                                const initials = user.name.split(' ').map(n => n[0]).join('').toUpperCase();
-                                document.getElementById('user-avatar').textContent = initials;
-                                document.getElementById('user-name').textContent = user.name;
-                                document.getElementById('user-email').textContent = user.email;
-                                document.getElementById('welcome-name').textContent = user.name.split(' ')[0];
-                            }
+            try {
+                const res = await fetch('/api/assets/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                if (res.ok) {
+                    closeUploadModal();
+                    loadAssets();
+                    fileInput.value = '';
+                } else {
+                    alert('Upload failed');
+                }
+            } catch (e) { console.error(e); alert('Error uploading'); }
 
-                            // Logout handler
-                            document.addEventListener('DOMContentLoaded', () => {
-                                const logoutBtn = document.getElementById('logout-btn');
-                                if (logoutBtn) {
-                                    logoutBtn.addEventListener('click', async () => {
-                                        try {
-                                            await fetch('/api/auth/logout', {
-                                                method: 'POST',
-                                                credentials: 'include'
-                                            });
-                                            window.location.href = '/login';
-                                        } catch (error) {
-                                            console.error('Logout failed:', error);
-                                            window.location.href = '/login';
-                                        }
-                                    });
-                                }
-                            });
+            btn.innerText = originalText;
+            btn.disabled = false;
+        }
 
-                            // Run auth check
-                            checkAuth();
-                        </script>
-                    </body>
+        // --- Messages ---
+        async function loadMessages() {
+            try {
+                const res = await fetch('/api/messages');
+                const data = await res.json();
+                if (data.success) {
+                    messages = data.messages;
+                    renderMessages();
+                    document.getElementById('stat-messages').innerText = messages.length;
+                }
+            } catch (e) { console.error(e); }
+        }
+
+        function renderMessages() {
+            const tbody = document.querySelector('#messages-table tbody');
+            if (messages.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 2rem;">No messages yet.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = messages.map(msg => `
+                <tr style="cursor: pointer" onclick='openMessageDetail(${JSON.stringify(msg)})'>
+                    <td>${escapeHtml(msg.name)}</td>
+                    <td>${escapeHtml(msg.email)}</td>
+                    <td>${new Date(msg.received_at).toLocaleDateString()}</td>
+                    <td><span class="badge ${msg.status === 'unread' ? 'badge-new' : 'badge-read'}">${msg.status || 'read'}</span></td>
+                    <td>View</td>
+                </tr>
+            `).join('');
+        }
+
+        function openMessageDetail(msg) {
+            const modal = document.getElementById('message-modal');
+            const content = document.getElementById('message-detail-content');
+            content.innerHTML = `
+                <p><strong>From:</strong> ${escapeHtml(msg.name)} (<a href="mailto:${escapeHtml(msg.email)}">${escapeHtml(msg.email)}</a>)</p>
+                <p><strong>Date:</strong> ${new Date(msg.received_at).toLocaleString()}</p>
+                <hr style="border: 0; border-top: 1px solid #eee; margin: 1rem 0;">
+                <p style="white-space: pre-wrap;">${escapeHtml(msg.message)}</p>
+            `;
+            document.getElementById('reply-link').href = `mailto:${msg.email}?subject=Re: Your message to Shinshu Solutions`;
+            modal.classList.add('active');
+        }
+        function closeMessageModal() { document.getElementById('message-modal').classList.remove('active'); }
+
+
+        // --- Content ---
+        async function loadContent() {
+            try {
+                const res = await fetch('/api/content');
+                const data = await res.json();
+                if (data.success) {
+                    contentData = data.content || {};
+                    renderContentEditor();
+                }
+            } catch (e) { console.error(e); }
+        }
+
+        function renderContentEditor() {
+            const container = document.getElementById('content-editor-form');
+            if (Object.keys(contentData).length === 0) {
+                container.innerHTML = `
+                    <p style="text-align: center;">No dynamic content keys found. Add keys to the database manually or wait for setup.</p>
+                    <!-- Temporary way to add key for testing -->
+                    <div class="form-group">
+                        <label>Add New Key (Dev Mode)</label>
+                        <div style="display: flex; gap: 10px;">
+                            <input type="text" id="new-key-name" placeholder="key_name">
+                            <input type="text" id="new-key-value" placeholder="Value">
+                            <button class="btn btn-outline" onclick="addKey()">Add</button>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = Object.entries(contentData).map(([key, value]) => `
+                <div class="form-group">
+                    <label>${formatKey(key)} <small style="color: #999; font-weight: normal;">(${key})</small></label>
+                    <textarea data-key="${key}" rows="3">${escapeHtml(value)}</textarea>
+                </div>
+            `).join('');
+        }
+
+        async function saveContent() {
+            const inputs = document.querySelectorAll('#content-editor-form textarea');
+            const updates = {};
+            inputs.forEach(input => {
+                updates[input.dataset.key] = input.value;
+            });
+
+            const res = await fetch('/api/content', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ updates })
+            });
+            if (res.ok) alert('Saved!');
+            else alert('Error saving');
+        }
+
+        async function addKey() {
+            const key = document.getElementById('new-key-name').value;
+            const value = document.getElementById('new-key-value').value;
+            if (!key) return;
+            contentData[key] = value;
+            renderContentEditor();
+            // Auto save
+            await fetch('/api/content', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ updates: { [key]: value } })
+            });
+        }
+
+
+        // --- Utils ---
+        function formatBytes(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+        function escapeHtml(text) {
+            if (!text) return '';
+            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+        }
+        function formatKey(key) {
+            return key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+        }
+
+        const ws = new WebSocket('wss://' + window.location.host + '/api/ws'); // Placeholder if needed
+    </script>
+</body>
 
 </html>
