@@ -52,22 +52,19 @@
         }
 
         .logo {
-            font-family: 'Roboto Mono', monospace;
-            font-size: 1.5rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, var(--orange-primary), var(--orange-dark));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-decoration: none;
             display: flex;
             align-items: center;
         }
 
         .logo img {
-            height: 40px;
-            width: 40px;
-            margin-right: 12px;
+            height: 120px;
+            width: auto;
             object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover img {
+            transform: scale(1.05);
         }
 
         .nav-links {
@@ -202,10 +199,9 @@
 <body>
     <nav>
         <div class="nav-container">
-            <a href="/" class="logo">
+            <a href="/" class="logo" aria-label="Shinshu Solutions Home">
                 <img src="https://pub-c341cc62c3274ccba5aa77286b26fb90.r2.dev/iconography/shinshu-solutions-icon.png"
                     alt="Shinshu Solutions Logo">
-                SHINSHU SOLUTIONS
             </a>
             <ul class="nav-links">
                 <li><a href="/">Home</a></li>
