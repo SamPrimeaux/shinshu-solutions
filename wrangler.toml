@@ -1,0 +1,33 @@
+name = "shinshu-solutions"
+main = "src/index.ts"
+compatibility_date = "2024-01-01"
+account_id = "e3b02eefdc01c8bd458e608e6cffccb8"
+
+# D1 Database Configuration
+[[d1_databases]]
+binding = "DB"
+database_name = "shinshu-solutions"
+database_id = "b3463aea-6a59-4794-9f9d-e9a56167fb46"
+
+# R2 Bucket Configuration
+[[r2_buckets]]
+binding = "R2"
+bucket_name = "shinshu-solutions"
+
+# Environment Variables (set via wrangler secret put)
+[vars]
+ENVIRONMENT = "development"
+
+# Production Environment
+[env.production]
+name = "shinshu-solutions-production"
+vars = { ENVIRONMENT = "production" }
+
+[[env.production.d1_databases]]
+binding = "DB"
+database_name = "shinshu-solutions"
+database_id = "b3463aea-6a59-4794-9f9d-e9a56167fb46"
+
+[[env.production.r2_buckets]]
+binding = "R2"
+bucket_name = "shinshu-solutions"
