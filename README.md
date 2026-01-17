@@ -24,7 +24,7 @@ npm install
 
 ### 2. Set Environment Variables
 ```bash
-export CLOUDFLARE_API_TOKEN="pd4INhYztXJy5Mqjc66WTw4fLPeDWB8zydnY6K7h"
+
 ```
 
 ### 3. Set Secrets
@@ -49,7 +49,7 @@ wrangler deploy --env production
 Upload static files to R2 bucket (always use `--remote`):
 
 ```bash
-export CLOUDFLARE_API_TOKEN="pd4INhYztXJy5Mqjc66WTw4fLPeDWB8zydnY6K7h"
+
 wrangler r2 object put shinshu-solutions/FILENAME --file=static/FILENAME --content-type="TYPE" --remote
 ```
 
