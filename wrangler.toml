@@ -1,4 +1,4 @@
-name = "shinshu-solutions"
+name = "shinshu-solutions-ci-di"
 main = "src/index.ts"
 compatibility_date = "2024-01-01"
 account_id = "e3b02eefdc01c8bd458e608e6cffccb8"
