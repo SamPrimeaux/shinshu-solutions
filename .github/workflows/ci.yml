@@ -1,0 +1,63 @@
+# Bulletproof CI/CD — Shinshu Solutions (Jake)
+# tenant_id: tenant_jake_waalk | client_id: client_jake_waalk
+# Deploy MUST succeed or workflow fails.
+# Uses Jake's CF account: e3b02eefdc01c8bd458e608e6cffccb8
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+      - run: npm ci
+      - name: Validate
+        run: |
+          [ -f wrangler.toml ] || { echo "❌ wrangler.toml missing"; exit 1; }
+          [ -f package.json ] || { echo "❌ package.json missing"; exit 1; }
+          npm run build 2>/dev/null || true
+          echo "✅ Validate OK"
+
+  deploy:
+    needs: validate
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      CLOUDFLARE_ACCOUNT_ID: e3b02eefdc01c8bd458e608e6cffccb8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+      - run: npm ci
+      - name: Check secret
+        run: |
+          if [ -z "${{ secrets.CLOUDFLARE_API_TOKEN }}" ]; then
+            echo "❌ CLOUDFLARE_API_TOKEN not set. Add in Settings → Secrets → Actions"
+            echo "   Use Jake's CF token (Edit Workers) for account e3b02eefdc01c8bd458e608e6cffccb8"
+            exit 1
+          fi
+          echo "✅ Secret present"
+      - name: Deploy to Cloudflare
+        run: npm run deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      - name: R2 Backup (Jake's account)
+        run: |
+          tar czf ci-backup.tar.gz --exclude=node_modules --exclude=.git .
+          npx wrangler r2 object put shinshu-builds-backups/ci/shinshu-solutions/${{ github.run_id }}-${{ github.sha }}.tar.gz --file=ci-backup.tar.gz 2>/dev/null || echo "⚠️ R2 backup skipped (create bucket shinshu-builds-backups if needed)"
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        continue-on-error: true

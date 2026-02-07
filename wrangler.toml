@@ -42,6 +42,9 @@ head_sampling_rate = 1
 # Environment Variables
 [vars]
 ENVIRONMENT = "production"
+# Canonical tenant/client IDs (TENANT_ID_FORMAT.md)
+TENANT_ID = "tenant_jake_waalk"
+CLIENT_ID = "client_jake_waalk"
 
 # Logpush (optional - for external log export)
 # [logpush]
