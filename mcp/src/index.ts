@@ -8,6 +8,9 @@ interface Env {
     ENVIRONMENT: string;
     TENANT_ID: string;
     CLIENT_ID: string;
+    GITHUB_TOKEN: string;
+    RESEND_API_KEY: string;
+    RESEND_FROM_EMAIL: string;
 }
 interface JsonRpcRequest {
     jsonrpc: '2.0';
