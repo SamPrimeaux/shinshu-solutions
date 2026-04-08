@@ -1,0 +1,37 @@
+name = "shinshu-solutions-mcp"
+main = "mcp/src/index.ts"
+compatibility_date = "2024-11-01"
+compatibility_flags = ["nodejs_compat"]
+account_id = "e3b02eefdc01c8bd458e608e6cffccb8"
+workers_dev = true
+
+[[routes]]
+pattern = "mcp.shinshusolutions.com/*"
+zone_name = "shinshusolutions.com"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "shinshu-solutions"
+database_id = "b3463aea-6a59-4794-9f9d-e9a56167fb46"
+
+[[r2_buckets]]
+binding = "R2"
+bucket_name = "shinshu-solutions"
+
+[vars]
+ENVIRONMENT = "production"
+TENANT_ID = "tenant_jake_waalk"
+CLIENT_ID = "client_jake_waalk"
+CLOUDFLARE_ACCOUNT_ID = "e3b02eefdc01c8bd458e608e6cffccb8"
+
+[observability]
+enabled = true
+head_sampling_rate = 1
+
+[observability.logs]
+enabled = true
+invocation_logs = true
+
+[observability.traces]
+enabled = true
+head_sampling_rate = 1
