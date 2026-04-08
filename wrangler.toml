@@ -1,15 +1,28 @@
-# wrangler.toml
-name = "shinshu-solutions-mcp"
+name = "shinshu-solutions"
 main = "src/index.ts"
-compatibility_date = "2024-11-01"
+compatibility_date = "2026-01-20"
 compatibility_flags = ["nodejs_compat"]
 account_id = "e3b02eefdc01c8bd458e608e6cffccb8"
-
 workers_dev = true
+preview_urls = true
 
 [[routes]]
-pattern = "mcp.shinshusolutions.com/*"
+pattern = "shinshusolutions.com/*"
 zone_name = "shinshusolutions.com"
+
+[[routes]]
+pattern = "www.shinshusolutions.com/*"
+zone_name = "shinshusolutions.com"
+
+[[routes]]
+pattern = "shinshusolutions.com"
+zone_name = "shinshusolutions.com"
+custom_domain = true
+
+[[routes]]
+pattern = "www.shinshusolutions.com"
+zone_name = "shinshusolutions.com"
+custom_domain = true
 
 [[d1_databases]]
 binding = "DB"
@@ -20,22 +33,32 @@ database_id = "b3463aea-6a59-4794-9f9d-e9a56167fb46"
 binding = "R2"
 bucket_name = "shinshu-solutions"
 
+[[kv_namespaces]]
+binding = "CACHE"
+id = "6fa17f013de0453f8fb9e4f68f0df208"
+
+[[durable_objects.bindings]]
+name = "STATE"
+class_name = "ShinshuState"
+
+[[analytics_engine_datasets]]
+binding = "ANALYTICS_ENGINE"
+dataset = "shinshu-solutions-analytics"
+
+[ai]
+binding = "AI"
+
 [vars]
 ENVIRONMENT = "production"
 TENANT_ID = "tenant_jake_waalk"
 CLIENT_ID = "client_jake_waalk"
 
 [observability]
-enabled = true
-head_sampling_rate = 1
-
-[observability.logs]
-enabled = true
-invocation_logs = true
+enabled = false
 
 [observability.traces]
 enabled = true
-head_sampling_rate = 1
 
-# Secret (set via: wrangler secret put MCP_SECRET)
-# MCP_SECRET = <set in dashboard>
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["ShinshuState"]

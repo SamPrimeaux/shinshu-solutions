@@ -553,3 +553,12 @@ app.get('*', async (c) => {
 });
 
 export default app;
+
+// Durable Object stub — preserves existing ShinshuState binding
+export class ShinshuState {
+    state: DurableObjectState;
+    constructor(state: DurableObjectState) { this.state = state; }
+    async fetch(request: Request): Promise<Response> {
+        return new Response('ShinshuState OK');
+    }
+}
