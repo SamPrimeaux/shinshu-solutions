@@ -108,3 +108,125 @@ export default {
         }
     },
 };
+
+// ─── Gmail + GitHub tool implementations (append to runTool switch) ───────────
+// Add these cases to the switch in runTool() before the default: throw line
+// Copy each case block into the switch manually or via Cursor
+
+/*
+        case 'gmail_list_messages': {
+            const token = args.oauth_token as string;
+            const query = args.query as string ?? '';
+            const limit = args.limit as number ?? 10;
+            if (!token) return { error: 'oauth_token required — pass Google access token from session' };
+            const url = `https://gmail.googleapis.com/gmail/v1/users/me/messages?maxResults=${limit}${query ? `&q=${encodeURIComponent(query)}` : ''}`;
+            const res = await fetch(url, { headers: { 'Authorization': `Bearer ${token}` } });
+            const data: any = await res.json();
+            if (!res.ok) return { error: data.error?.message ?? 'Gmail API error', status: res.status };
+            const messages = data.messages ?? [];
+            // Fetch snippet for each message
+            const details = await Promise.all(messages.slice(0, 5).map(async (m: any) => {
+                const r = await fetch(`https://gmail.googleapis.com/gmail/v1/users/me/messages/${m.id}?format=metadata&metadataHeaders=Subject&metadataHeaders=From&metadataHeaders=Date`,
+                    { headers: { 'Authorization': `Bearer ${token}` } });
+                const d: any = await r.json();
+                const headers = d.payload?.headers ?? [];
+                const get = (name: string) => headers.find((h: any) => h.name === name)?.value ?? '';
+                return { id: m.id, subject: get('Subject'), from: get('From'), date: get('Date'), snippet: d.snippet };
+            }));
+            return { total: data.resultSizeEstimate, messages: details };
+        }
+
+        case 'gmail_send_message': {
+            const token = args.oauth_token as string;
+            const to = args.to as string;
+            const subject = args.subject as string;
+            const body = args.body as string;
+            const html = args.html as boolean ?? false;
+            if (!token) return { error: 'oauth_token required' };
+            const contentType = html ? 'text/html' : 'text/plain';
+            const raw = btoa(
+                `To: ${to}\r\nSubject: ${subject}\r\nContent-Type: ${contentType}; charset=utf-8\r\n\r\n${body}`
+            ).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+            const res = await fetch('https://gmail.googleapis.com/gmail/v1/users/me/messages/send', {
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify({ raw }),
+            });
+            const data: any = await res.json();
+            if (!res.ok) return { error: data.error?.message ?? 'Send failed', status: res.status };
+            return { success: true, message_id: data.id, thread_id: data.threadId };
+        }
+
+        case 'gmail_get_message': {
+            const token = args.oauth_token as string;
+            const message_id = args.message_id as string;
+            if (!token || !message_id) return { error: 'oauth_token and message_id required' };
+            const res = await fetch(
+                `https://gmail.googleapis.com/gmail/v1/users/me/messages/${message_id}?format=full`,
+                { headers: { 'Authorization': `Bearer ${token}` } }
+            );
+            const data: any = await res.json();
+            if (!res.ok) return { error: data.error?.message ?? 'Fetch failed' };
+            const headers = data.payload?.headers ?? [];
+            const get = (name: string) => headers.find((h: any) => h.name === name)?.value ?? '';
+            const getBody = (payload: any): string => {
+                if (payload.body?.data) return atob(payload.body.data.replace(/-/g, '+').replace(/_/g, '/'));
+                if (payload.parts) return payload.parts.map((p: any) => getBody(p)).join('\n');
+                return '';
+            };
+            return { id: data.id, subject: get('Subject'), from: get('From'), to: get('To'), date: get('Date'), body: getBody(data.payload), snippet: data.snippet };
+        }
+
+        case 'github_get_commits': {
+            const repo = args.repo as string ?? 'shinshu-solutions';
+            const branch = args.branch as string ?? 'main';
+            const limit = args.limit as number ?? 10;
+            const res = await fetch(
+                `https://api.github.com/repos/SamPrimeaux/${repo}/commits?sha=${branch}&per_page=${limit}`,
+                { headers: { 'Authorization': `Bearer ${env.GITHUB_TOKEN}`, 'Accept': 'application/vnd.github.v3+json', 'User-Agent': 'shinshu-solutions-mcp' } }
+            );
+            const data: any = await res.json();
+            if (!res.ok) return { error: data.message ?? 'GitHub API error' };
+            return data.map((c: any) => ({ sha: c.sha.slice(0, 7), message: c.commit.message, author: c.commit.author.name, date: c.commit.author.date }));
+        }
+
+        case 'github_get_actions': {
+            const repo = args.repo as string ?? 'shinshu-solutions';
+            const limit = args.limit as number ?? 5;
+            const res = await fetch(
+                `https://api.github.com/repos/SamPrimeaux/${repo}/actions/runs?per_page=${limit}`,
+                { headers: { 'Authorization': `Bearer ${env.GITHUB_TOKEN}`, 'Accept': 'application/vnd.github.v3+json', 'User-Agent': 'shinshu-solutions-mcp' } }
+            );
+            const data: any = await res.json();
+            if (!res.ok) return { error: data.message ?? 'GitHub API error' };
+            return (data.workflow_runs ?? []).map((r: any) => ({ id: r.id, name: r.name, status: r.status, conclusion: r.conclusion, branch: r.head_branch, sha: r.head_sha.slice(0, 7), created_at: r.created_at, url: r.html_url }));
+        }
+
+        case 'github_get_file': {
+            const repo = args.repo as string ?? 'shinshu-solutions';
+            const path = args.path as string;
+            const branch = args.branch as string ?? 'main';
+            const res = await fetch(
+                `https://api.github.com/repos/SamPrimeaux/${repo}/contents/${path}?ref=${branch}`,
+                { headers: { 'Authorization': `Bearer ${env.GITHUB_TOKEN}`, 'Accept': 'application/vnd.github.v3+json', 'User-Agent': 'shinshu-solutions-mcp' } }
+            );
+            const data: any = await res.json();
+            if (!res.ok) return { error: data.message ?? 'File not found' };
+            const content = data.content ? atob(data.content.replace(/\n/g, '')) : '';
+            return { path: data.path, size: data.size, sha: data.sha, content: content.slice(0, 5000) };
+        }
+
+        case 'github_create_issue': {
+            const repo = args.repo as string ?? 'shinshu-solutions';
+            const title = args.title as string;
+            const body = args.body as string ?? '';
+            const res = await fetch(
+                `https://api.github.com/repos/SamPrimeaux/${repo}/issues`,
+                { method: 'POST', headers: { 'Authorization': `Bearer ${env.GITHUB_TOKEN}`, 'Accept': 'application/vnd.github.v3+json', 'User-Agent': 'shinshu-solutions-mcp', 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ title, body }) }
+            );
+            const data: any = await res.json();
+            if (!res.ok) return { error: data.message ?? 'Create issue failed' };
+            return { success: true, number: data.number, url: data.html_url, title: data.title };
+        }
+*/
