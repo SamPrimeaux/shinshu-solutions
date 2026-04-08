@@ -137,12 +137,12 @@ async function runTool(name: string, args: Record<string, unknown>, env: Env): P
         case 'ss_update_site_page': {
             const { slug, nav_visible, sort_order, nav_label } = args as { slug: string; nav_visible?: boolean; sort_order?: number; nav_label?: string };
             const f: string[] = []; const v: unknown[] = [];
-            if (nav_visible !== undefined) { f.push('nav_visible=?'); v.push(nav_visible ? 1 : 0); }
+            if (nav_visible !== undefined) { f.push('visible=?'); v.push(nav_visible ? 1 : 0); }
             if (sort_order !== undefined) { f.push('sort_order=?'); v.push(sort_order); }
-            if (nav_label !== undefined) { f.push('nav_label=?'); v.push(nav_label); }
+            if (nav_label !== undefined) { f.push('display_name=?'); v.push(nav_label); }
             if (!f.length) return { error: 'No fields provided' };
             v.push(Date.now(), slug);
-            await db.prepare(`UPDATE site_pages SET ${f.join(',')},updated_at=? WHERE slug=?`).bind(...v).run();
+            await db.prepare(`UPDATE site_pages SET ${f.join(',')},updated_at=? WHERE file_name=?`).bind(...v).run();
             return { success: true, slug };
         }
         case 'ss_schema_inspect': {
