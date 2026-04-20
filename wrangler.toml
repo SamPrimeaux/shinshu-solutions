@@ -1,4 +1,4 @@
-name = "shinshu-solutions"
+name = "shinshu-solutions-ci-di"
 main = "src/index.ts"
 compatibility_date = "2026-01-20"
 compatibility_flags = ["nodejs_compat"]
